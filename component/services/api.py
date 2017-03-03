@@ -23,3 +23,10 @@ def login(email, password):
     response = post_call(url, params=params)
 
     return response.json()
+
+
+def register(params):
+    url = get_url('register')
+    response = post_call(url, params=params)
+
+    return response.json()
