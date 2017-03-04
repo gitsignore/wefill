@@ -1,4 +1,6 @@
 from django.shortcuts import render
+
+from app.decorators import auth_required
 from app.forms import LoginForm, RegisterForm
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -16,6 +18,9 @@ def login(request):
             api_callback = api_login(form.cleaned_data['email'], form.cleaned_data['password'])
             if 'token' in api_callback:
                 request.session['token'] = api_callback['token']
+                request.session['is_authenticated'] = True
+                if 'is_admin' in api_callback:
+                    request.session['is_admin'] = api_callback['is_admin']
 
                 return HttpResponseRedirect(reverse('wefill'))
 
@@ -37,12 +42,16 @@ def register(request):
         if form.is_valid():
             form.cleaned_data['username'] = form.cleaned_data['email']
             api_callback = api_register(form.cleaned_data)
-            if 'errors' in api_callback:
-                return render(request, 'registration/register.html', {
-                    'form': form, 'errors': api_callback['errors']
-                })
+            if 'token' in api_callback:
+                request.session['token'] = api_callback['token']
+                request.session['is_authenticated'] = True
+                if 'is_admin' in api_callback:
+                    request.session['is_admin'] = api_callback['is_admin']
 
-            return HttpResponseRedirect(reverse('login'))
+                return HttpResponseRedirect(reverse('wefill'))
+            return render(request, 'registration/register.html', {
+                'form': form, 'errors': api_callback['errors']
+            })
 
     # if a GET (or any other method) we'll create a blank form
     else:
@@ -54,6 +63,13 @@ def register(request):
 def logout(request):
     try:
         del request.session['token']
+        del request.session['is_authenticated']
+        del request.session['is_admin']
     except KeyError:
         pass
     return HttpResponseRedirect(reverse('wefill'))
+
+
+@auth_required
+def test(request):
+    return render(request, 'test.html')

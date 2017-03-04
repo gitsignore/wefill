@@ -128,15 +128,15 @@ STATICFILES_DIRS = (
 )
 
 # Wich URL to redirect the user after a successful authentication
-LOGIN_REDIRECT_URL = '#'
+LOGIN_REDIRECT_URL = 'login'
 
 API = {
     'default': {
         'URL': 'http://127.0.0.1',
         'PORT': '8001',
         'ROUTES': {
-            'register': '/api/v1/auth/register/',
-            'login': '/api/v1/auth/login/',
+            'register': '/api/v1/register/',
+            'login': '/api/v1/login/',
         },
     }
 }
