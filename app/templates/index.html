@@ -1,40 +1,232 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-    <div class="site-wrapper">
-
-        <div class="site-wrapper-inner">
-
-            <div class="cover-container">
-
-                <div class="masthead clearfix">
-                    <div class="inner">
-                        <h3 class="masthead-brand">Wefill</h3>
-                        <nav>
-                            <ul class="nav masthead-nav">
-                                {% if request.session.token %}
-                                    <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
-                                {% else %}
-                                    <li><a href="{% url 'register' %}">S'inscrire</a></li>
-                                    <li><a href="{% url 'login' %}">Se connecter</a></li>
-                                {% endif %}
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-
-                <div class="inner cover">
-                    <h1 class="cover-heading">Wefill</h1>
-                    <p class="lead">Nous vous livrons votre carburant là où vous voulez sans que vous vous déplaciez !
-                        Choisissez, reservez, c'est livré !</p>
-                    <p class="lead">
-                        <a href="#" class="btn btn-lg btn-primary">En savoir plus</a>
-                    </p>
-                </div>
-
+    <nav id="mainNav" class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" href="{% url 'wefill' %}">WEFILLL</a>
             </div>
 
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    {% if request.session.token %}
+                        <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+                    {% else %}
+                        <li><a href="{% url 'register' %}">S'inscrire</a></li>
+                        <li><a href="{% url 'login' %}">Se connecter</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
         </div>
+        <!-- /.container-fluid -->
+    </nav>
 
-    </div>
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="header-content">
+                        <div class="header-content-inner">
+                            <h1>Et le carburant vint à toi !</h1>
+                            <h2>Nous vous livrons votre carburant là où vous voulez sans que vous vous déplaciez !
+                                Choisissez, reservez, c'est livré !</h2>
+                            <a href="{% url 'register' %}" class="btn btn-outline btn-xl page-scroll">Essayer
+                                maintenant</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="device-container">
+                        <div class="device-mockup iphone5 portrait black">
+                            <div class="device">
+                                <div class="screen">
+                                    <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
+                                    <img src="{% static 'images/screen.png' %}" class="img-responsive" alt="">
+                                </div>
+                                <div class="button">
+                                    <!-- You can hook the "home button" to some JavaScript events or just remove it -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="container-fluid section1">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-6">
+                    <div class="col-xs-2">
+                        <img alt="" src="{% static 'images/gas-station.svg' %}"/>
+                    </div>
+                    <div class="col-xs-2">
+                        <img alt="" src="{% static 'images/gas-station-1.svg' %}"/>
+                    </div>
+                    <div class="col-xs-2">
+                        <img alt="" src="{% static 'images/oil.svg' %}"/>
+                    </div>
+                    <div class="col-xs-2">
+                        <img alt="" src="{% static 'images/barrel.svg' %}"/>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h3>Soyez libre de voyager.</h3>
+                    <p>WEFILL c’est la livraison de carburants à la demande, jour et nuit, pour les
+                        particuliers et les entreprises.
+                        Ne faites plus de détours et ne perdez plus de temps pour aller dans des stations-service vous
+                        salir les mains pour vous servir vous même.</p>
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <h5>Simple</h5>
+                            <p class="small-text">Via notre site internet choisissez votre créneau et nous vous livrons instantanément.</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Premium</h5>
+                            <p class="small-text">Quelque soit votre type de carburant, tous est compris et c'est au meilleur prix ! Ne
+                                perdez plus de temps à chercher la station la moins chère de votre quartier.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container-fluid section2">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-6">
+                    <h3>La sécurité avant tout.</h3>
+                    <p>WEFILL respecte les règles en vigueur de la région Ile de France afin d'assurer le
+                        transport sécuritaire de notre carburant. Nos chauffeurs sont hautement qualifiés et possèdent
+                        des licences commerciales et la certification authorisant le transport de matières à risque.
+                        Nous traitons votre voiture comme si elle était la nôtre.
+                    </p>
+                </div>
+                <div class="col-md-6">
+                    <div class=" col-md-offset-3 col-md-6">
+                        <img alt="" src="{% static 'images/tank-truck.svg' %}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container-fluid section3">
+        <div class="row">
+            <div class="col-md-offset-6 col-md-4">
+                <div class="col-md-10">
+                    <h3>“WEFILL est vraiment pratique.<br>Je peux désormais faire mon métier de taxi sans avoir besoin de
+                        m'arrêter à une station service. C'est un gain de temps et d'argent considérable.”</h3>
+                    <p>Claire Montet, chauffeur chez Taxi 8</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container-fluid section4">
+        <div class="row">
+            <img alt="" src="{% static 'images/startup-4.svg' %}"/>
+            <img alt="" src="{% static 'images/startup-5.svg' %}"/>
+            <img alt="" src="{% static 'images/startup-6.svg' %}"/>
+            <img alt="" src="{% static 'images/startup-7.svg' %}"/>
+            <img alt="" src="{% static 'images/startup-8.svg' %}"/>
+        </div>
+    </section>
+
+    <section class="container-fluid section5">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-offset-2 col-md-8 title">
+                    <h3>Il n'est pas difficile de voir comment nous rendons votre vie plus facile tous les jours.</h3>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <div class="col-md-12">
+                            <img src="{% static 'images/startup-9.svg' %}">
+                            <p><strong>24h/24 7j/7.</strong> Nous sommes toujours là pour vous quelle que soit l'heure
+                                de la journée.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-12">
+                            <img src="{% static 'images/startup-10.svg' %}">
+                            <p><strong>Paiement sécurisé.</strong> Nous garantissons un paiement sécurisé avec notre
+                                partenaire Paypal.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-12">
+                            <img src="{% static 'images/startup-11.svg' %}">
+                            <p><strong>Rapide.</strong> Nous respectons nos engagements et livrons dans les plus brefs
+                                délais.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-4">
+                        <div class="col-md-12">
+                            <img src="{% static 'images/startup-12.svg' %}">
+                            <p><strong>Economique.</strong> Nous vous garantissons toujours un prix bas par rapport à la
+                                concurence.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-12">
+                            <img src="{% static 'images/startup-13.svg' %}">
+                            <p><strong>N'importe où.</strong> Quelque soit votre appareil nous vous accompagnons
+                                partout.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="col-md-12">
+                            <img src="{% static 'images/startup-14.svg' %}">
+                            <p><strong>Connection sécurisée.</strong> Chaque requête est acheminée via HTTPS.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="container-fluid">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="col-md-6">
+                    <ul>
+                        <li><h6>WEFILL</h6></li>
+                        <li>
+                            Nous accompagnons de plus en plus de parisiens au quotidien afin de faciliter leur mobilité.
+                            Notre startup envisage révolutionner l'approvisionnement de carburant à travers toute la France.
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-offset-1 col-md-2">
+                    <ul>
+                        <li><h6>Authentification</h6></li>
+                        <li>Se connecter</li>
+                        <li>S'inscrire</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <ul>
+                        <li><h6>Mentions légales</h6></li>
+                        <li>Terms</li>
+                        <li>Legal</li>
+                        <li>Privacy</li>
+                        <li>License</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
 {% endblock %}
