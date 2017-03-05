@@ -1,0 +1,102 @@
+body {
+    background: url("../images/bg-pattern.png"), #43977b;
+    /* fallback for old browsers */
+    background: url("../images/bg-pattern.png"), -webkit-linear-gradient(to left, #43977b, #435f97);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: url("../images/bg-pattern.png"), linear-gradient(to left, #43977b, #435f97);
+    color: #fff;
+}
+
+h1 {
+    font-size: 20px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.form-control {
+    border: 1px solid rgba(1, 1, 1, 0.3);
+    background: none;
+    border-radius: 0;
+    color: #eee;
+}
+
+.form-control option,
+.form-control option:focus,
+.form-control option:active,
+.form-control option:hover,
+.form-control option:visited {
+    background-color: #2f5760;
+}
+
+ul {
+    list-style-type: none;
+}
+
+#calendar {
+    margin-top: 70px;
+}
+
+table {
+    text-align: center;
+}
+
+.month {
+    width: 100%;
+    border: none;
+    background: none;
+}
+
+th {
+    text-align: center;
+    margin: 0;
+    padding: 10px 0;
+    color: #fff;
+    background: rgba(1, 1, 1, 0.3);
+}
+
+td {
+    padding: 30px 0;
+    background: rgba(1, 1, 1, 0.1);
+    margin: 0;
+    color: #eee;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+td:hover {
+    background: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    transition: 0.5s;
+}
+
+/* Month header */
+tr .month {
+    text-align: center;
+    font-size: 20px;
+    color: #fff;
+    padding-bottom: 30px;
+}
+
+.noday {
+    cursor: default;
+    background: rgba(1, 1, 1, 0.2);
+}
+
+.noday:hover {
+    background: rgba(1, 1, 1, 0.2);
+}
+
+.today {
+    background: rgba(26, 139, 188, 0.7);
+    color: #ffffff !important;
+}
+
+.selected {
+    background: rgba(26, 188, 139, 0.7);
+}
+
+.complete {
+    background: rgba(225, 40, 76, 0.7);
+    color: #ffffff !important;
+}

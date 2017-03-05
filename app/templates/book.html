@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load event_tags %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}"/>
+{% endblock %}
+{% block content %}
+    {% include 'navbar/navbar.html' %}
+
+    <div id="calendar" class="container-fluid">
+        <div class="col-xs-10 col-lg-offset-2 col-lg-6">
+            {% event_calendar year month event_list %}
+        </div>
+        <div class="col-xs-2 col-lg-2">
+            <h1>Horaire</h1>
+            <select class="form-control">
+                <option>-------------</option>
+                <option>09h - 10h</option>
+                <option>10h - 11h</option>
+                <option>11h - 12h</option>
+                <option>12h - 13h</option>
+                <option>13h - 14h</option>
+            </select>
+        </div>
+    </div>
+{% endblock %}
