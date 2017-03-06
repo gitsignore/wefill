@@ -13,6 +13,9 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-right">
                 {% if request.session.token %}
+                    <li><a href="{% url 'book' %}">Réserver</a></li>
+                    <li><a href="{% url 'profile' %}">Mon compte</a></li>
+                    <li><a href="{% url 'orders' %}">Mes commandes</a></li>
                     <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
                 {% else %}
                     <li><a href="{% url 'register' %}">S'inscrire</a></li>

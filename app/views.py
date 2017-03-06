@@ -1,15 +1,14 @@
 from calendar import monthrange, calendar
 from datetime import date, datetime
 
-from django.shortcuts import render, render_to_response
-from django.template import RequestContext
-
+from django.shortcuts import render
 from app.decorators import auth_required
 from app.forms import LoginForm, RegisterForm
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from component.services.api import login as api_login
 from component.services.api import register as api_register
+from component.services.api import account_informations as api_account_informations
 
 
 def login(request):
@@ -19,9 +18,10 @@ def login(request):
         form = LoginForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            api_callback = api_login(form.cleaned_data['email'], form.cleaned_data['password'])
+            api_callback = api_login(form.cleaned_data)
             if 'token' in api_callback:
                 request.session['token'] = api_callback['token']
+                request.session['email'] = api_callback['email']
                 request.session['is_authenticated'] = True
                 if 'is_admin' in api_callback:
                     request.session['is_admin'] = api_callback['is_admin']
@@ -49,6 +49,7 @@ def register(request):
             api_callback = api_register(form.cleaned_data)
             if 'token' in api_callback:
                 request.session['token'] = api_callback['token']
+                request.session['email'] = api_callback['email']
                 request.session['is_authenticated'] = True
                 if 'is_admin' in api_callback:
                     request.session['is_admin'] = api_callback['is_admin']
@@ -68,11 +69,23 @@ def register(request):
 def logout(request):
     try:
         del request.session['token']
+        del request.session['email']
         del request.session['is_authenticated']
         del request.session['is_admin']
     except KeyError:
         pass
     return HttpResponseRedirect(reverse('wefill'))
+
+
+@auth_required
+def profile(request):
+    user = api_account_informations(request.session['email'], request.session['token'])
+    return render(request, 'profile.html', {'user': user})
+
+
+@auth_required
+def orders(request):
+    return render(request, 'orders.html')
 
 
 @auth_required
