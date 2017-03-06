@@ -7,10 +7,10 @@
     <header>
         <div class="container">
             <div class="row">
-                <div class="col-sm-7">
+                <div class="col-xs-offset-1 col-xs-10 col-sm-6">
                     <div class="header-content">
                         <div class="header-content-inner">
-                            <h1>Et le carburant vint à toi !</h1>
+                            <h1 class="hidden-xs">Et le carburant vint à toi !</h1>
                             <h2>Nous vous livrons votre carburant là où vous voulez sans que vous vous déplaciez !
                                 Choisissez, reservez, c'est livré !</h2>
                             <a href="#" class="btn btn-success btn-xl">Essayer
@@ -18,16 +18,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-5">
+                <div class="hidden-xs col-sm-5">
                     <div class="device-container">
                         <div class="device-mockup iphone5 portrait black">
                             <div class="device">
                                 <div class="screen">
-                                    <!-- Demo image for screen mockup, you can put an image here, some HTML, an animation, video, or anything else! -->
                                     <img src="{% static 'images/screen.png' %}" class="img-responsive" alt="">
                                 </div>
                                 <div class="button">
-                                    <!-- You can hook the "home button" to some JavaScript events or just remove it -->
                                 </div>
                             </div>
                         </div>
@@ -39,7 +37,7 @@
 
     <section class="container-fluid section1">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-xs-12 col-md-8 col-md-offset-2">
                 <div class="col-xs-12 col-md-3">
                     <div class="col-xs-3 col-sm-12">
                         <img alt="" src="{% static 'images/gas-station.svg' %}"/>
@@ -98,8 +96,8 @@
 
     <section class="container-fluid section3">
         <div class="row">
-            <div class="col-md-offset-6 col-md-4">
-                <div class="col-md-10">
+            <div class="col-xs-offset-4 col-xs-8 col-md-offset-6 col-md-4">
+                <div class="col-md-12">
                     <h3>“WEFILL est vraiment pratique.<br>Je peux désormais faire mon métier de taxi sans avoir besoin de
                         m'arrêter à une station service. C'est un gain de temps et d'argent considérable.”</h3>
                     <p>Claire Montet, chauffeur chez Taxi 8</p>
@@ -185,14 +183,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="col-md-offset-1 col-md-2">
-                    <ul>
-                        <li><h6>Authentification</h6></li>
-                        <li>Se connecter</li>
-                        <li>S'inscrire</li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
+                <div class="col-md-offset-2 col-md-2">
                     <ul>
                         <li><h6>Mentions légales</h6></li>
                         <li>Terms</li>
