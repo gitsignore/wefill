@@ -1,6 +1,5 @@
 from calendar import monthrange, calendar
 from datetime import date, datetime
-
 from django.shortcuts import render
 from app.decorators import auth_required
 from app.forms import LoginForm, RegisterForm
@@ -80,6 +79,7 @@ def logout(request):
 @auth_required
 def profile(request):
     user = api_account_informations(request.session['email'], request.session['token'])
+
     return render(request, 'profile.html', {'user': user})
 
 

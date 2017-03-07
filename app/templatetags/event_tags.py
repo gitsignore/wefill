@@ -8,6 +8,7 @@ from django.utils.html import conditional_escape as esc
 
 register = template.Library()
 
+
 def do_event_calendar(parser, token):
     """
     The template tag's syntax is {% event_calendar year month event_list %}

@@ -1,1 +1,10 @@
 <h1>Your email : {{ user.email }}</h1>
+<h1>Your first name : {{ user.firstname }}</h1>
+<h1>Your last name : {{ user.lastname }}</h1>
+
+{% for address in user.address_set %}
+    <h2>Address name : {{ address.name }}</h2>
+    <h2>Address street : {{ address.street }}</h2>
+    <h2>Address city : {{ address.city }}</h2>
+    <h2>Address zip : {{ address.zip }}</h2>
+{% endfor %}
