@@ -138,8 +138,11 @@ API = {
         'URL': 'http://127.0.0.1',
         'PORT': '8001',
         'ROUTES': {
-            'users': '/api/v1/users/',
             'login': '/api/v1/users/login/',
+            'users': '/api/v1/users/',
+            'addresses': '/api/v1/users/addresses/',
+            'vehicles': '/api/v1/users/vehicles/',
+            'orders': '/api/v1/users/orders/',
         },
     }
 }
