@@ -1,1 +1,1 @@
-from redirect_exception import RedirectException
+from .redirect_exception import RedirectException
