@@ -4,7 +4,7 @@ register = template.Library()
 
 
 def is_authenticated(session):
-    if 'token' in session:
+    if 'user' in session and 'is_authenticated' in session:
         return True
     return False
 

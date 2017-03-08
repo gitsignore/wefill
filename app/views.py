@@ -11,26 +11,21 @@ from component.services.api import account_informations as api_account_informati
 
 
 def login(request):
-    # if this is a POST request we need to process the form data
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
         form = LoginForm(request.POST)
-        # check whether it's valid:
         if form.is_valid():
-            api_callback = api_login(form.cleaned_data)
-            if 'token' in api_callback:
-                request.session['token'] = api_callback['token']
-                request.session['email'] = api_callback['email']
+            user = api_login(form.cleaned_data)
+            if user:
+                request.session['user'] = user
                 request.session['is_authenticated'] = True
-                if 'is_admin' in api_callback:
-                    request.session['is_admin'] = api_callback['is_admin']
+                if 'is_admin' in user:
+                    request.session['is_admin'] = user['is_admin']
 
                 return HttpResponseRedirect(reverse('wefill'))
 
             return render(request, 'registration/login.html',
-                          {'form': form, 'errors': api_callback['non_field_errors']})
+                          {'form': form, 'errors': user['non_field_errors']})
 
-    # if a GET (or any other method) we'll create a blank form
     else:
         form = LoginForm()
 
@@ -38,27 +33,22 @@ def login(request):
 
 
 def register(request):
-    # if this is a POST request we need to process the form data
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
         form = RegisterForm(request.POST)
-        # check whether it's valid:
         if form.is_valid():
             form.cleaned_data['username'] = form.cleaned_data['email']
-            api_callback = api_register(form.cleaned_data)
-            if 'token' in api_callback:
-                request.session['token'] = api_callback['token']
-                request.session['email'] = api_callback['email']
+            user = api_register(form.cleaned_data)
+            if user:
+                request.session['user'] = user
                 request.session['is_authenticated'] = True
-                if 'is_admin' in api_callback:
-                    request.session['is_admin'] = api_callback['is_admin']
+                if 'is_admin' in user:
+                    request.session['is_admin'] = user['is_admin']
 
                 return HttpResponseRedirect(reverse('wefill'))
             return render(request, 'registration/register.html', {
-                'form': form, 'errors': api_callback['errors']
+                'form': form, 'errors': user['errors']
             })
 
-    # if a GET (or any other method) we'll create a blank form
     else:
         form = RegisterForm()
 
@@ -67,8 +57,7 @@ def register(request):
 
 def logout(request):
     try:
-        del request.session['token']
-        del request.session['email']
+        del request.session['user']
         del request.session['is_authenticated']
         del request.session['is_admin']
     except KeyError:
@@ -78,7 +67,7 @@ def logout(request):
 
 @auth_required
 def profile(request):
-    user = api_account_informations(request.session['email'], request.session['token'])
+    user = api_account_informations(request.session['user']['email'], request.session['user']['token'])
 
     return render(request, 'profile.html', {'user': user})
 
