@@ -29,11 +29,11 @@ def get_call(url, params=None, headers=None):
     return False
 
 
-def post_call(url, params=None, json=None):
+def post_call(url, params=None, json=None, headers=None):
     if params is None:
         params = {}
 
-    response = requests.post(url, data=params, json=json)
+    response = requests.post(url, data=params, json=json, headers=headers)
 
     if response.status_code == 401:
         raise RedirectException(reverse('logout'))
@@ -56,8 +56,36 @@ def register(params):
     return post_call(url, params=params)
 
 
-def account_informations(user_email, token):
+def get_user(user_email, token):
     url = get_url('users', user_email)
     headers = header_token(token)
 
     return get_call(url, headers=headers)
+
+
+def get_address(address_id, token):
+    url = get_url('addresses', address_id)
+    headers = header_token(token)
+
+    return get_call(url, headers=headers)
+
+
+def edit_address(address, token):
+    url = get_url('addresses')
+    headers = header_token(token)
+
+    return post_call(url, params=address, headers=headers)
+
+
+def get_vehicle(vehicle_id, token):
+    url = get_url('vehicles', vehicle_id)
+    headers = header_token(token)
+
+    return get_call(url, headers=headers)
+
+
+def edit_vehicle(vehicle, token):
+    url = get_url('vehicles')
+    headers = header_token(token)
+
+    return post_call(url, params=vehicle, headers=headers)

@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from component.services.api import login as api_login
 from component.services.api import register as api_register
-from component.services.api import account_informations as api_account_informations
+from component.services.api import get_user as api_get_user
 
 
 def login(request):
@@ -67,7 +67,7 @@ def logout(request):
 
 @auth_required
 def profile(request):
-    user = api_account_informations(request.session['user']['email'], request.session['user']['token'])
+    user = api_get_user(request.session['user']['email'], request.session['user']['token'])
 
     return render(request, 'profile.html', {'user': user})
 
