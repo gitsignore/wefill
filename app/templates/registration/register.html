@@ -3,17 +3,26 @@
 {% block title %}Inscription{% endblock %}
 
 {% block content %}
-    <h2>S'inscrire</h2>
-    <form method="post">
-        {% if errors %}
-            <ol>
-                {% for error in errors %}
-                    <li><strong>{{ error|escape }}</strong></li>
-                {% endfor %}
-            </ol>
-        {% endif %}
-        {% csrf_token %}
-        {{ form }}
-        <button class="btn btn-lg btn-primary" type="submit">Login</button>
-    </form>
+    <div class="login">
+      <h2>S'inscrire</h2>
+      <form method="post">
+          {% if errors %}
+              <ol>
+                  {% for error in errors %}
+                      <li><strong>{{ error|escape }}</strong></li>
+                  {% endfor %}
+              </ol>
+          {% endif %}
+          {% csrf_token %}
+            {% for form_loop in form %}
+              <div class="group">
+                {{ form_loop }}
+                <span class="highlight"></span><span class="bar"></span>
+                <label>{{ form_loop.name }}</label>
+              </div>
+            {% endfor %}
+          <button class="button buttonBlue" type="submit">Create Account
+          <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div></button>
+      </form>
+    </div>
 {% endblock %}
