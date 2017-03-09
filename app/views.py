@@ -82,16 +82,18 @@ def create_address(request):
     if request.method == 'POST':
         form = AddressForm(request.POST)
         if form.is_valid():
-            address = api_create_address(form.cleaned_data, request.session['user']['token'])
+            data = form.cleaned_data
+            data['user'] = request.session['user']['id']
+            address = api_create_address(data, request.session['user']['token'])
             if address:
                 return HttpResponseRedirect(reverse('profile'))
-            return render(request, 'address.html', {
+            return render(request, 'address/create_address.html', {
                 'form': form, 'errors': address['errors']
             })
     else:
         form = AddressForm()
 
-    return render(request, 'address.html', {'form': form})
+    return render(request, 'address/create_address.html', {'form': form})
 
 
 @auth_required
@@ -99,18 +101,19 @@ def edit_address(request, address_id):
     address = api_get_address(address_id, request.session['user']['token'])
     if request.method == 'POST':
         form = AddressForm(request.POST)
-        form['user'] = request.session['user']['id']
         if form.is_valid():
-            address = api_edit_address(form.cleaned_data, request.session['user']['token'])
+            data = form.cleaned_data
+            data['user'] = request.session['user']['id']
+            address = api_edit_address(data, request.session['user']['token'])
             if address:
                 return HttpResponseRedirect(reverse('profile'))
-            return render(request, 'address.html', {
-                'form': form, 'errors': address['errors']
+            return render(request, 'address/edit_address.html', {
+                'form': form, 'errors': address['errors'], 'id': address['id']
             })
     else:
         form = AddressForm(initial=address)
 
-    return render(request, 'address.html', {'form': form})
+    return render(request, 'address/edit_address.html', {'form': form, 'id': address['id']})
 
 
 @auth_required
@@ -118,16 +121,18 @@ def create_vehicle(request):
     if request.method == 'POST':
         form = VehicleForm(request.POST)
         if form.is_valid():
-            vehicle = api_create_vehicle(form.cleaned_data, request.session['user']['token'])
+            data = form.cleaned_data
+            data['user'] = request.session['user']['id']
+            vehicle = api_create_vehicle(data, request.session['user']['token'])
             if vehicle:
                 return HttpResponseRedirect(reverse('profile'))
-            return render(request, 'vehicle.html', {
+            return render(request, 'vehicle/create_vehicle.html', {
                 'form': form, 'errors': vehicle['errors']
             })
     else:
         form = VehicleForm()
 
-    return render(request, 'vehicle.html', {'form': form})
+    return render(request, 'vehicle/create_vehicle.html', {'form': form})
 
 
 @auth_required
@@ -135,18 +140,19 @@ def edit_vehicle(request, vehicle_id):
     vehicle = api_get_vehicle(vehicle_id, request.session['user']['token'])
     if request.method == 'POST':
         form = VehicleForm(request.POST)
-        form['user'] = request.session['user']['id']
         if form.is_valid():
-            vehicle = api_edit_vehicle(form.cleaned_data, request.session['user']['token'])
+            data = form.cleaned_data
+            data['user'] = request.session['user']['id']
+            vehicle = api_edit_vehicle(data, request.session['user']['token'])
             if vehicle:
                 return HttpResponseRedirect(reverse('profile'))
-            return render(request, 'vehicle.html', {
+            return render(request, 'vehicle/edit_vehicle.html', {
                 'form': form, 'errors': vehicle['errors']
             })
     else:
         form = VehicleForm(initial=vehicle)
 
-    return render(request, 'vehicle.html', {'form': form})
+    return render(request, 'vehicle/edit_vehicle.html', {'form': form})
 
 
 @auth_required
