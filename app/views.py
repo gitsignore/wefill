@@ -2,12 +2,18 @@ from calendar import monthrange, calendar
 from datetime import date, datetime
 from django.shortcuts import render
 from app.decorators import auth_required
-from app.forms import LoginForm, RegisterForm
+from app.forms import LoginForm, RegisterForm, AddressForm, VehicleForm
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from component.services.api import login as api_login
 from component.services.api import register as api_register
 from component.services.api import get_user as api_get_user
+from component.services.api import get_address as api_get_address
+from component.services.api import get_vehicle as api_get_vehicle
+from component.services.api import create_address as api_create_address
+from component.services.api import create_vehicle as api_create_vehicle
+from component.services.api import edit_address as api_edit_address
+from component.services.api import edit_vehicle as api_edit_vehicle
 
 
 def login(request):
@@ -25,7 +31,6 @@ def login(request):
 
             return render(request, 'registration/login.html',
                           {'form': form, 'errors': user['non_field_errors']})
-
     else:
         form = LoginForm()
 
@@ -48,7 +53,6 @@ def register(request):
             return render(request, 'registration/register.html', {
                 'form': form, 'errors': user['errors']
             })
-
     else:
         form = RegisterForm()
 
@@ -70,6 +74,78 @@ def profile(request):
     user = api_get_user(request.session['user']['email'], request.session['user']['token'])
 
     return render(request, 'profile.html', {'user': user})
+
+
+@auth_required
+def create_address(request):
+    if request.method == 'POST':
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            address = api_create_address(form.cleaned_data)
+            if address:
+                return HttpResponseRedirect(reverse('profile'))
+            return render(request, 'address.html', {
+                'form': form, 'errors': address['errors']
+            })
+    else:
+        form = AddressForm()
+
+    return render(request, 'address.html', {'form': form})
+
+
+@auth_required
+def edit_address(request, address_id):
+    address = api_get_address(address_id, request.session['user']['token'])
+    if request.method == 'POST':
+        form = AddressForm(request.POST)
+        form['user'] = request.session['user']['id']
+        if form.is_valid():
+            address = api_edit_address(form.cleaned_data)
+            if address:
+                return HttpResponseRedirect(reverse('profile'))
+            return render(request, 'address.html', {
+                'form': form, 'errors': address['errors']
+            })
+    else:
+        form = AddressForm(initial=address)
+
+    return render(request, 'address.html', {'form': form})
+
+
+@auth_required
+def create_vehicle(request):
+    if request.method == 'POST':
+        form = VehicleForm(request.POST)
+        if form.is_valid():
+            vehicle = api_create_vehicle(form.cleaned_data)
+            if vehicle:
+                return HttpResponseRedirect(reverse('profile'))
+            return render(request, 'vehicle.html', {
+                'form': form, 'errors': vehicle['errors']
+            })
+    else:
+        form = VehicleForm()
+
+    return render(request, 'vehicle.html', {'form': form})
+
+
+@auth_required
+def edit_vehicle(request, vehicle_id):
+    vehicle = api_get_vehicle(vehicle_id, request.session['user']['token'])
+    if request.method == 'POST':
+        form = VehicleForm(request.POST)
+        form['user'] = request.session['user']['id']
+        if form.is_valid():
+            vehicle = api_edit_vehicle(form.cleaned_data)
+            if vehicle:
+                return HttpResponseRedirect(reverse('profile'))
+            return render(request, 'vehicle.html', {
+                'form': form, 'errors': vehicle['errors']
+            })
+    else:
+        form = VehicleForm(initial=vehicle)
+
+    return render(request, 'vehicle.html', {'form': form})
 
 
 @auth_required
