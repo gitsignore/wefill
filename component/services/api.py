@@ -222,3 +222,15 @@ def edit_vehicle(vehicle, token):
 
     return post_call(url, params=vehicle, headers=headers)
 
+
+def order_validate(order, token):
+    """
+    Create an order
+    :param order:
+    :param token:
+    :return:
+    """
+    url = get_url('orders')
+    headers = header_token(token)
+
+    return put_call(url, params=order, headers=headers)

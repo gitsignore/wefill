@@ -2,7 +2,7 @@ from calendar import monthrange, calendar
 from datetime import date, datetime
 from django.shortcuts import render
 from app.decorators import auth_required
-from app.forms import LoginForm, RegisterForm, AddressForm, VehicleForm
+from app.forms import LoginForm, RegisterForm, AddressForm, VehicleForm, OrderForm
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from component.services.api import login as api_login
@@ -14,6 +14,7 @@ from component.services.api import create_address as api_create_address
 from component.services.api import create_vehicle as api_create_vehicle
 from component.services.api import edit_address as api_edit_address
 from component.services.api import edit_vehicle as api_edit_vehicle
+from component.services.api import order_validate as api_order_validate
 
 
 def login(request):
@@ -81,7 +82,7 @@ def create_address(request):
     if request.method == 'POST':
         form = AddressForm(request.POST)
         if form.is_valid():
-            address = api_create_address(form.cleaned_data)
+            address = api_create_address(form.cleaned_data, request.session['user']['token'])
             if address:
                 return HttpResponseRedirect(reverse('profile'))
             return render(request, 'address.html', {
@@ -100,7 +101,7 @@ def edit_address(request, address_id):
         form = AddressForm(request.POST)
         form['user'] = request.session['user']['id']
         if form.is_valid():
-            address = api_edit_address(form.cleaned_data)
+            address = api_edit_address(form.cleaned_data, request.session['user']['token'])
             if address:
                 return HttpResponseRedirect(reverse('profile'))
             return render(request, 'address.html', {
@@ -117,7 +118,7 @@ def create_vehicle(request):
     if request.method == 'POST':
         form = VehicleForm(request.POST)
         if form.is_valid():
-            vehicle = api_create_vehicle(form.cleaned_data)
+            vehicle = api_create_vehicle(form.cleaned_data, request.session['user']['token'])
             if vehicle:
                 return HttpResponseRedirect(reverse('profile'))
             return render(request, 'vehicle.html', {
@@ -136,7 +137,7 @@ def edit_vehicle(request, vehicle_id):
         form = VehicleForm(request.POST)
         form['user'] = request.session['user']['id']
         if form.is_valid():
-            vehicle = api_edit_vehicle(form.cleaned_data)
+            vehicle = api_edit_vehicle(form.cleaned_data, request.session['user']['token'])
             if vehicle:
                 return HttpResponseRedirect(reverse('profile'))
             return render(request, 'vehicle.html', {
@@ -161,6 +162,15 @@ def book(request):
         The event series to show. None shows all event series.
 
         """
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            order = api_order_validate(form.cleaned_data, request.session['user']['token'])
+            if order:
+                return HttpResponseRedirect(reverse('orders'))
+            return render(request, 'book.html', {
+                'form': form, 'errors': order['errors']
+            })
 
     my_year = int(2017)
     my_month = int(3)
