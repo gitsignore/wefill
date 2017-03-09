@@ -1,37 +1,36 @@
 from calendar import monthrange, calendar
 from datetime import date, datetime
-
 from django.shortcuts import render
 from app.decorators import auth_required
-from app.forms import LoginForm, RegisterForm
+from app.forms import LoginForm, RegisterForm, AddressForm, VehicleForm
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from component.services.api import login as api_login
 from component.services.api import register as api_register
-from component.services.api import account_informations as api_account_informations
+from component.services.api import get_user as api_get_user
+from component.services.api import get_address as api_get_address
+from component.services.api import get_vehicle as api_get_vehicle
+from component.services.api import create_address as api_create_address
+from component.services.api import create_vehicle as api_create_vehicle
+from component.services.api import edit_address as api_edit_address
+from component.services.api import edit_vehicle as api_edit_vehicle
 
 
 def login(request):
-    # if this is a POST request we need to process the form data
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
         form = LoginForm(request.POST)
-        # check whether it's valid:
         if form.is_valid():
-            api_callback = api_login(form.cleaned_data)
-            if 'token' in api_callback:
-                request.session['token'] = api_callback['token']
-                request.session['email'] = api_callback['email']
+            user = api_login(form.cleaned_data)
+            if user:
+                request.session['user'] = user
                 request.session['is_authenticated'] = True
-                if 'is_admin' in api_callback:
-                    request.session['is_admin'] = api_callback['is_admin']
+                if 'is_admin' in user:
+                    request.session['is_admin'] = user['is_admin']
 
                 return HttpResponseRedirect(reverse('wefill'))
 
             return render(request, 'registration/login.html',
-                          {'form': form, 'errors': api_callback['non_field_errors']})
-
-    # if a GET (or any other method) we'll create a blank form
+                          {'form': form, 'errors': user['non_field_errors']})
     else:
         form = LoginForm()
 
@@ -39,27 +38,21 @@ def login(request):
 
 
 def register(request):
-    # if this is a POST request we need to process the form data
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
         form = RegisterForm(request.POST)
-        # check whether it's valid:
         if form.is_valid():
             form.cleaned_data['username'] = form.cleaned_data['email']
-            api_callback = api_register(form.cleaned_data)
-            if 'token' in api_callback:
-                request.session['token'] = api_callback['token']
-                request.session['email'] = api_callback['email']
+            user = api_register(form.cleaned_data)
+            if user:
+                request.session['user'] = user
                 request.session['is_authenticated'] = True
-                if 'is_admin' in api_callback:
-                    request.session['is_admin'] = api_callback['is_admin']
+                if 'is_admin' in user:
+                    request.session['is_admin'] = user['is_admin']
 
                 return HttpResponseRedirect(reverse('wefill'))
             return render(request, 'registration/register.html', {
-                'form': form, 'errors': api_callback['errors']
+                'form': form, 'errors': user['errors']
             })
-
-    # if a GET (or any other method) we'll create a blank form
     else:
         form = RegisterForm()
 
@@ -68,8 +61,7 @@ def register(request):
 
 def logout(request):
     try:
-        del request.session['token']
-        del request.session['email']
+        del request.session['user']
         del request.session['is_authenticated']
         del request.session['is_admin']
     except KeyError:
@@ -79,8 +71,81 @@ def logout(request):
 
 @auth_required
 def profile(request):
-    user = api_account_informations(request.session['email'], request.session['token'])
+    user = api_get_user(request.session['user']['email'], request.session['user']['token'])
+
     return render(request, 'profile.html', {'user': user})
+
+
+@auth_required
+def create_address(request):
+    if request.method == 'POST':
+        form = AddressForm(request.POST)
+        if form.is_valid():
+            address = api_create_address(form.cleaned_data)
+            if address:
+                return HttpResponseRedirect(reverse('profile'))
+            return render(request, 'address.html', {
+                'form': form, 'errors': address['errors']
+            })
+    else:
+        form = AddressForm()
+
+    return render(request, 'address.html', {'form': form})
+
+
+@auth_required
+def edit_address(request, address_id):
+    address = api_get_address(address_id, request.session['user']['token'])
+    if request.method == 'POST':
+        form = AddressForm(request.POST)
+        form['user'] = request.session['user']['id']
+        if form.is_valid():
+            address = api_edit_address(form.cleaned_data)
+            if address:
+                return HttpResponseRedirect(reverse('profile'))
+            return render(request, 'address.html', {
+                'form': form, 'errors': address['errors']
+            })
+    else:
+        form = AddressForm(initial=address)
+
+    return render(request, 'address.html', {'form': form})
+
+
+@auth_required
+def create_vehicle(request):
+    if request.method == 'POST':
+        form = VehicleForm(request.POST)
+        if form.is_valid():
+            vehicle = api_create_vehicle(form.cleaned_data)
+            if vehicle:
+                return HttpResponseRedirect(reverse('profile'))
+            return render(request, 'vehicle.html', {
+                'form': form, 'errors': vehicle['errors']
+            })
+    else:
+        form = VehicleForm()
+
+    return render(request, 'vehicle.html', {'form': form})
+
+
+@auth_required
+def edit_vehicle(request, vehicle_id):
+    vehicle = api_get_vehicle(vehicle_id, request.session['user']['token'])
+    if request.method == 'POST':
+        form = VehicleForm(request.POST)
+        form['user'] = request.session['user']['id']
+        if form.is_valid():
+            vehicle = api_edit_vehicle(form.cleaned_data)
+            if vehicle:
+                return HttpResponseRedirect(reverse('profile'))
+            return render(request, 'vehicle.html', {
+                'form': form, 'errors': vehicle['errors']
+            })
+    else:
+        form = VehicleForm(initial=vehicle)
+
+    return render(request, 'vehicle.html', {'form': form})
 
 
 @auth_required

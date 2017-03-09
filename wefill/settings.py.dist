@@ -48,9 +48,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'app.middlewares.redirect.RedirectMiddleware',
 ]
 
 ROOT_URLCONF = 'wefill.urls'
+
+APPEND_SLASH = True
 
 TEMPLATES = [
     {
@@ -135,8 +138,11 @@ API = {
         'URL': 'http://127.0.0.1',
         'PORT': '8001',
         'ROUTES': {
-            'users': '/api/v1/users/',
             'login': '/api/v1/users/login/',
+            'users': '/api/v1/users/',
+            'addresses': '/api/v1/addresses/',
+            'vehicles': '/api/v1/vehicles/',
+            'orders': '/api/v1/orders/',
         },
     }
 }
