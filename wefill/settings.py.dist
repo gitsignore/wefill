@@ -140,9 +140,9 @@ API = {
         'ROUTES': {
             'login': '/api/v1/users/login/',
             'users': '/api/v1/users/',
-            'addresses': '/api/v1/users/addresses/',
-            'vehicles': '/api/v1/users/vehicles/',
-            'orders': '/api/v1/users/orders/',
+            'addresses': '/api/v1/addresses/',
+            'vehicles': '/api/v1/vehicles/',
+            'orders': '/api/v1/orders/',
         },
     }
 }
