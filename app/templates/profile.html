@@ -8,3 +8,10 @@
     <h2>Address city : {{ address.city }}</h2>
     <h2>Address zip : {{ address.zip }}</h2>
 {% endfor %}
+
+{% for vehicle in user.vehicle_set %}
+    <h2>Nom : {{ vehicle.name }}</h2>
+    <h2>Marque : {{ vehicle.brand }}</h2>
+    <h2>Plaque d'immatriculation : {{ vehicle.plate }}</h2>
+    <h2>Couleur : {{ vehicle.color }}</h2>
+{% endfor %}

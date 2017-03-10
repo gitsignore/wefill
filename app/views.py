@@ -15,6 +15,31 @@ from component.services.api import create_vehicle as api_create_vehicle
 from component.services.api import edit_address as api_edit_address
 from component.services.api import edit_vehicle as api_edit_vehicle
 from component.services.api import order_validate as api_order_validate
+from component.services.api import get_gas as api_get_gas
+from component.services.api import get_orders as api_get_orders
+from component.services.api import get_order as api_get_order
+
+from component.services.paypal_api import build_params as paypal_build_params
+
+from paypal.standard.forms import PayPalPaymentsForm
+
+
+@auth_required
+def payment(request):
+    order = api_get_order(request.session['order']['id'], request.session['user']['token'])
+
+    if order:
+        paypal_dict = paypal_build_params()
+
+        form = PayPalPaymentsForm(initial=paypal_dict)
+        context = {"form": form}
+
+        return render(request, "payment.html", context)
+
+
+@auth_required
+def summary(request):
+    return render(request, "summary.html")
 
 
 def login(request):
@@ -168,15 +193,31 @@ def book(request):
         The event series to show. None shows all event series.
 
         """
+    token = request.session['user']['token']
+    user = api_get_user(request.session['user']['email'], token)
+    orders = api_get_orders(token)
+    orders[0]['date_refill'] = '2017-03-16T09:00:00Z'
+    orders[1]['date_refill'] = '2017-03-17T10:00:00Z'
+    orders[2]['date_refill'] = '2017-03-16T11:00:00Z'
+    gas_choices = api_get_gas(request.session['user']['token'])
     if request.method == 'POST':
-        form = OrderForm(request.POST)
+        form = OrderForm(request.POST, user['address_set'], user['vehicle_set'], gas_choices)
         if form.is_valid():
-            order = api_order_validate(form.cleaned_data, request.session['user']['token'])
+            data = form.cleaned_data
+            data['user'] = request.session['user']['id']
+            for gas_choice in gas_choices:
+                if data['gas_name'] == gas_choice['name']:
+                    data.update({'gas_price': gas_choice['price']})
+            order = api_order_validate(data, request.session['user']['token'])
             if order:
-                return HttpResponseRedirect(reverse('orders'))
+                request.session['order'] = order
+                request.session['payment'] = True
+                return HttpResponseRedirect(reverse('payment'))
             return render(request, 'book.html', {
                 'form': form, 'errors': order['errors']
             })
+
+    form = OrderForm(None, user['address_set'], user['vehicle_set'], gas_choices)
 
     my_year = int(2017)
     my_month = int(3)
@@ -196,26 +237,83 @@ def book(request):
         my_next_month = 1
     my_year_after_this = my_year + 1
     my_year_before_this = my_year - 1
-    return render(request, "book.html", {'event_list': '',
-                                         'month': my_month,
-                                         'month_name': named_month(my_month),
-                                         'year': my_year,
-                                         'previous_month': my_previous_month,
-                                         'previous_month_name': named_month(my_previous_month),
-                                         'previous_year': my_previous_year,
-                                         'next_month': my_next_month,
-                                         'next_month_name': named_month(my_next_month),
-                                         'next_year': my_next_year,
-                                         'year_before_this': my_year_before_this,
-                                         'year_after_this': my_year_after_this,
-                                         })
+    return render(request, "book.html", {
+        'user': user,
+        'form': form,
+        'event_list': orders,
+        'month': my_month,
+        'month_name': named_month(my_month),
+        'year': my_year,
+        'previous_month': my_previous_month,
+        'previous_month_name': named_month(my_previous_month),
+        'previous_year': my_previous_year,
+        'next_month': my_next_month,
+        'next_month_name': named_month(my_next_month),
+        'next_year': my_next_year,
+        'year_before_this': my_year_before_this,
+        'year_after_this': my_year_after_this,
+    })
+
+
+@auth_required
+def calendar(request, year, month):
+    """
+        Show calendar of events for a given month of a given year.
+        ``series_id``
+        The event series to show. None shows all event series.
+
+        """
+    token = request.session['user']['token']
+    orders = api_get_orders(token)
+    today = date.today()
+    my_year = int(year)
+    my_month = int(month)
+
+    if my_month < int(today.month) or my_year < int(today.year):
+        my_month = int(today.month)
+        my_year = int(today.year)
+
+    # Calculate values for the calendar controls. 1-indexed (Jan = 1)
+    my_previous_year = my_year
+    if today.month < my_month:
+        my_previous_month = my_month - 1
+        if my_previous_month == 0:
+            my_previous_year = my_year - 1
+            my_previous_month = 12
+    else:
+        my_previous_year = ''
+        my_previous_month = ''
+    my_next_year = my_year
+    my_next_month = my_month + 1
+    if my_next_month == 13:
+        my_next_year = my_year + 1
+        my_next_month = 1
+    my_year_after_this = my_year + 1
+    my_year_before_this = my_year - 1
+    return render(request, "calendar/calendar.html", {
+        'event_list': orders,
+        'month': my_month,
+        'month_name': named_month(my_month),
+        'year': my_year,
+        'previous_month': my_previous_month,
+        'previous_month_name': named_month(my_previous_month),
+        'previous_year': my_previous_year,
+        'next_month': my_next_month,
+        'next_month_name': named_month(my_next_month),
+        'next_year': my_next_year,
+        'year_before_this': my_year_before_this,
+        'year_after_this': my_year_after_this,
+    })
 
 
 def named_month(month_number):
     """
     Return the name of the month, given the number.
     """
-    return date(1900, month_number, 1).strftime("%B")
+    if month_number != '':
+        return date(1900, month_number, 1).strftime("%B")
+    else:
+        return ''
 
 
 def this_month(request):

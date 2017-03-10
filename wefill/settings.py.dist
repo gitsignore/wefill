@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'paypal.standard.ipn',
+    'widget_tweaks',
     'app',
 ]
 
@@ -143,8 +145,17 @@ API = {
             'addresses': '/api/v1/addresses/',
             'vehicles': '/api/v1/vehicles/',
             'orders': '/api/v1/orders/',
+            'gas': '/api/v1/gas/',
         },
     }
 }
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+
+PAYPAL_TEST = True
+PAYPAL_IMAGE = "https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg"
+PAYPAL_SUBSCRIPTION_IMAGE = "https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg"
+PAYPAL_DONATION_IMAGE = "https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg"
+PAYPAL_SANDBOX_IMAGE = "https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg"
+PAYPAL_SUBSCRIPTION_SANDBOX_IMAGE = "https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg"
+PAYPAL_DONATION_SANDBOX_IMAGE = "https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg"

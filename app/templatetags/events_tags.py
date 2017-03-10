@@ -1,17 +1,16 @@
 from __future__ import print_function
 from __future__ import print_function
 import locale
-from calendar import HTMLCalendar
 from django import template
 from datetime import date
 from itertools import groupby
-
-from django.utils.html import conditional_escape as esc
+import datetime
+import calendar
 
 register = template.Library()
 
 
-day_schedules = (
+DAY_SCHEDULES = (
     '09:00 - 10:00',
     '10:00 - 11:00',
     '11:00 - 12:00',
@@ -27,7 +26,7 @@ day_schedules = (
 )
 
 
-def do_event_calendar(parser, token):
+def do_events(parser, token):
     """
     The template tag's syntax is {% event_calendar year month event_list %}
     """
@@ -59,42 +58,55 @@ class EventCalendarNode(template.Node):
             my_event_list = self.event_list.resolve(context)
             my_year = self.year.resolve(context)
             my_month = self.month.resolve(context)
-            cal = EventCalendar(my_event_list)
-            return cal.formatmonth(int(my_year), int(my_month))
+            events = self.group_by_day(my_event_list)
+            num_days = calendar.monthrange(my_year, my_month)[1]
+            days = [datetime.date(my_year, my_month, day) for day in range(1, num_days + 1)]
+            body = ''
+
+            for day in days:
+                day_events = list()
+                if str(day) in events:
+                    for event in events[str(day)]:
+                        day_events.append(event)
+                body += self.formatday(str(day), day_events)
+
+            return body
         except ValueError:
             return
         except template.VariableDoesNotExist:
             return
 
-
-class EventCalendar(HTMLCalendar):
-    """
-    Overload Python's calendar.HTMLCalendar to add the appropriate events to
-    each day's table cell.
-    """
-
-    def __init__(self, events):
-        super(EventCalendar, self).__init__()
-        self.events = self.group_by_day(events)
-
-    def formatday(self, day, weekday):
+    def formatday(self, full_date, events):
+        day = full_date[-2:]
+        today = date.today()
+        if str(today)[-2:] == day:
+            display = 'show'
+        else:
+            display = 'hide'
         if day != 0:
-            cssclass = self.cssclasses[weekday]
-            cssclass += ' day'
-            if date.today() == date(self.year, self.month, day):
-                cssclass += ' today active'
-            if date.today() > date(self.year, self.month, day):
-                cssclass = 'noday'
-            return self.day_cell(cssclass, '<span class="dayNumberNoEvents">%d</span>' % (day))
-        return self.day_cell('noday', '&nbsp;')
+            body = '<div class="list-group {0} {2}" data-src={1}>'.format(day, full_date, display)
+            for schedule in DAY_SCHEDULES:
+                if events:
+                    for key, event in enumerate(events):
+                        if schedule[:2] != event['date_refill'][11:13]:
+                            body += '<button type="button" class="list-group-item" data-src={0}>{1}</button>'.format(
+                                schedule[:5],
+                                schedule,
+                            )
+                            break
+                        else:
+                            del events[key]
+                            break
+                else:
+                    body += '<button type="button" class="list-group-item" data-src={0}>{1}</button>'.format(schedule[:5], schedule)
+            body += '</div>'
 
-    def formatmonth(self, year, month):
-        self.year, self.month = year, month
-        return super(EventCalendar, self).formatmonth(year, month)
+            return body
+        return
 
     def group_by_day(self, events):
         groups = {}
-        # data = sorted(events, key=lambda x: x['date_refill'])
+        events = sorted(events, key=lambda x: x['date_refill'])
 
         for key, group in groupby(events, lambda x: x['date_refill'][:10]):
             list_of = []
@@ -104,8 +116,5 @@ class EventCalendar(HTMLCalendar):
 
         return groups
 
-    def day_cell(self, cssclass, body):
-        return '<td class="%s">%s</td>' % (cssclass, body)
-
 # Register the template tag so it is available to templates
-register.tag("event_calendar", do_event_calendar)
+register.tag("events", do_events)
