@@ -168,7 +168,7 @@ def create_address(address, token):
     url = get_url('addresses')
     headers = header_token(token)
 
-    return put_call(url, params=address, headers=headers)
+    return post_call(url, params=address, headers=headers)
 
 
 def edit_address(address, token):
@@ -181,7 +181,7 @@ def edit_address(address, token):
     url = get_url('addresses')
     headers = header_token(token)
 
-    return post_call(url, params=address, headers=headers)
+    return put_call(url, params=address, headers=headers)
 
 
 def get_vehicle(vehicle_id, token):
@@ -207,7 +207,7 @@ def create_vehicle(vehicle, token):
     url = get_url('vehicles')
     headers = header_token(token)
 
-    return put_call(url, params=vehicle, headers=headers)
+    return post_call(url, params=vehicle, headers=headers)
 
 
 def edit_vehicle(vehicle, token):
@@ -220,7 +220,7 @@ def edit_vehicle(vehicle, token):
     url = get_url('vehicles')
     headers = header_token(token)
 
-    return post_call(url, params=vehicle, headers=headers)
+    return put_call(url, params=vehicle, headers=headers)
 
 
 def order_validate(order, token):
@@ -233,4 +233,4 @@ def order_validate(order, token):
     url = get_url('orders')
     headers = header_token(token)
 
-    return put_call(url, params=order, headers=headers)
+    return post_call(url, params=order, headers=headers)
