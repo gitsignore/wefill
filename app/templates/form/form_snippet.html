@@ -5,10 +5,12 @@
 {% endfor %}
 
 {% for field in form.visible_fields %}
-    <div class="fieldWrapper">
+    <div class="fieldWrapper group">
         {{ field.errors }}
-        {{ field.label_tag }}
         {{ field }}
+        <span class="highlight"></span><span class="bar"></span>
+        {{ field.label_tag }}
     </div>
 {% endfor %}
-<input type="submit" value="Submit" />
+<button class="button buttonBlue" type="submit" value="Submit">Submit
+<div class="ripples buttonRipples"><span class="ripplesCircle"></span></div></button>
