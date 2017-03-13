@@ -24,24 +24,6 @@ from component.services.paypal_api import build_params as paypal_build_params
 from paypal.standard.forms import PayPalPaymentsForm
 
 
-@auth_required
-def payment(request):
-    order = api_get_order(request.session['order']['id'], request.session['user']['token'])
-
-    if order:
-        paypal_dict = paypal_build_params()
-
-        form = PayPalPaymentsForm(initial=paypal_dict)
-        context = {"form": form}
-
-        return render(request, "payment.html", context)
-
-
-@auth_required
-def summary(request):
-    return render(request, "summary.html")
-
-
 def login(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
@@ -88,6 +70,7 @@ def register(request):
 def logout(request):
     try:
         del request.session['user']
+        del request.session['order']
         del request.session['is_authenticated']
         del request.session['is_admin']
     except KeyError:
@@ -182,7 +165,9 @@ def edit_vehicle(request, vehicle_id):
 
 @auth_required
 def orders(request):
-    return render(request, 'orders.html')
+    orders = api_get_orders(request.session['user']['token'])
+
+    return render(request, 'orders.html', {'orders': orders})
 
 
 @auth_required
@@ -219,6 +204,37 @@ def book(request):
         'user': user,
         'form': form,
     })
+
+
+@auth_required
+def payment(request):
+    try:
+        order = api_get_order(request.session['order']['id'], request.session['user']['token'])
+        user = request.session['user']
+
+        if order and user:
+            paypal_dict = paypal_build_params(order, user)
+
+            form = PayPalPaymentsForm(initial=paypal_dict)
+            context = {"form": form}
+            request.session['order'] = order
+
+            return render(request, "payment.html", context)
+    except KeyError:
+        return HttpResponseRedirect(reverse('book'))
+
+    return HttpResponseRedirect(reverse('book'))
+
+
+@auth_required
+def summary(request):
+    try:
+        order = request.session['order']
+        del request.session['order']
+
+        return render(request, "summary.html", {'order': order})
+    except KeyError:
+        return HttpResponseRedirect(reverse('book'))
 
 
 @auth_required

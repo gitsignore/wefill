@@ -1,32 +1,31 @@
 import uuid
 from django.conf import settings
-from django.urls import reverse
 from paypal.standard.models import ST_PP_COMPLETED
 from paypal.standard.ipn.signals import valid_ipn_received
 
 
-def build_params():
+def build_params(order, user):
     """
     Build paypal dict
     :return dict:
     """
     return {
-        "business": "maxime.signoret@gmail.com",
-        "amount": 1.00,
-        "item_name": "Sans Plomb 95",
-        "quantity": 20,
-        "currency_code": "EUR",
-        "address1": "1 rue du test",
-        "city": "Paris",
-        "zip": "75018",
-        "email": "test@test.com",
-        "first_name": "test_firstname",
-        "last_name": "test_lastname",
-        "lc": "FR",
+        "business": settings.PAYPAL_API['business'],
+        "amount": order['gas_price'],
+        "item_name": order['gas_name'],
+        "quantity": order['gas_quantity'],
+        "currency_code": settings.PAYPAL_API['currency_code'],
+        "address1": order['address']['street'],
+        "city": order['address']['city'],
+        "zip": order['address']['zip'],
+        "email": user['email'],
+        "first_name": user['firstname'],
+        "last_name": user['lastname'],
+        "lc": settings.PAYPAL_API['lc'],
         "invoice": str(uuid.uuid4()),
-        "notify_url": "http://127.0.0.1:8000/validate/",
-        "return_url": "http://127.0.0.1:8000/order/summary/",
-        "cancel_return": "http://127.0.0.1:8000/payment/",
+        "notify_url": settings.PAYPAL_API['notify_url'],
+        "return_url": settings.PAYPAL_API['return_url'],
+        "cancel_return": settings.PAYPAL_API['cancel_return'],
     }
 
 
@@ -43,7 +42,7 @@ def save_transaction(sender, **kwargs):
         # Check that the receiver email is the same we previously
         # set on the business field request. (The user could tamper
         # with those fields on payment form before send it to PayPal)
-        if ipn_obj.receiver_email != "receiver_email@example.com":
+        if ipn_obj.receiver_email != settings.PAYPAL_API['business']:
             # Not a valid payment
             return
         # Send PUT to api
