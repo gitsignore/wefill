@@ -1,0 +1,20 @@
+{% load calendar_tags %}
+{% load schedules_tags %}
+
+<div class="col-xs-12 col-md-8 col-md-offset-2">
+    <table width="100%">
+        <tr>
+            {% if previous_month != '' %}
+                <td width="20%" align="left">&lt;&lt; <a class="load" href="{% url 'calendar' previous_year previous_month %}">{{ previous_month_name }}</a></td>
+            {% endif %}
+            <td width="20%" align="right"><a class="load" href="{% url 'calendar' next_year next_month %}">{{ next_month_name }}</a> &gt;&gt;</td>
+        </tr>
+    </table>
+</div>
+<div class="col-xs-12 col-md-6 col-md-offset-2">
+    {% calendar year month event_list %}
+</div>
+<div class="col-xs-12 col-md-2">
+    <h1>Horaire</h1>
+    {% schedules year month event_list %}
+</div>

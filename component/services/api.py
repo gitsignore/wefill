@@ -178,7 +178,7 @@ def edit_address(address, token):
     :param token:
     :return:
     """
-    url = get_url('addresses')
+    url = get_url('addresses', address['id'])
     headers = header_token(token)
 
     return put_call(url, params=address, headers=headers)
@@ -217,7 +217,7 @@ def edit_vehicle(vehicle, token):
     :param token:
     :return:
     """
-    url = get_url('vehicles')
+    url = get_url('vehicles', vehicle['id'])
     headers = header_token(token)
 
     return put_call(url, params=vehicle, headers=headers)
@@ -234,3 +234,29 @@ def order_validate(order, token):
     headers = header_token(token)
 
     return post_call(url, params=order, headers=headers)
+
+
+def get_gas(token):
+    """
+    Get gas choices
+    :param token:
+    :return:
+    """
+    url = get_url('gas')
+    headers = header_token(token)
+
+    return get_call(url, headers=headers)
+
+
+def get_order(id, token):
+    url = get_url('orders', id)
+    headers = header_token(token)
+
+    return get_call(url, headers=headers)
+
+
+def get_orders(token):
+    url = get_url('orders')
+    headers = header_token(token)
+
+    return get_call(url, headers=headers)

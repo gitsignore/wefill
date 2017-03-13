@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.views.generic import TemplateView
 from . import views
 
@@ -14,4 +14,8 @@ urlpatterns = [
     url(r'^user/vehicle/(\d+)/$', views.edit_vehicle, name='edit_vehicle'),
     url(r'^orders/$', views.orders, name='orders'),
     url(r'^book/$', views.book, name='book'),
+    url(r'^calendar/(?P<year>[0-9]{4})/(?P<month>[0-9]{1,2})/$', views.calendar, name='calendar'),
+    url(r'^payment/$', views.payment, name='payment'),
+    url(r'^order/summary/$', views.summary, name='summary'),
+    url(r'^paypal/callback/', include('paypal.standard.ipn.urls')),
 ]

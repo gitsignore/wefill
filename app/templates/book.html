@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load event_tags %}
+{% load widget_tweaks %}
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}"/>
@@ -8,20 +8,39 @@
 {% block content %}
     {% include 'navbar/navbar.html' %}
 
-    <div id="calendar" class="container-fluid">
-        <div class="col-xs-10 col-lg-offset-2 col-lg-6">
-            {% event_calendar year month event_list %}
-        </div>
-        <div class="col-xs-2 col-lg-2">
-            <h1>Horaire</h1>
-            <select class="form-control">
-                <option>-------------</option>
-                <option>09h - 10h</option>
-                <option>10h - 11h</option>
-                <option>11h - 12h</option>
-                <option>12h - 13h</option>
-                <option>13h - 14h</option>
-            </select>
+    <div id="calendar" class="container-fluid"></div>
+    <div class="container-fluid">
+        <div class="col-xs-12 col-md-6 col-md-offset-2">
+            <form action="{% url 'book' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="control-label">Vous avez sélectionné la date et l'horaire de livraison du :</label>
+                    <p id="date">Vous n'avez pas sélectionné de date.</p>
+                    {{ form.date_refill|add_class:"form-control" }}
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Choisissez votre adresse :</label>
+                    {{ form.address|add_class:"form-control" }}
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Et votre véhicule :</label>
+                    {{ form.vehicle|add_class:"form-control" }}
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Le type de carburant :</label>
+                    {{ form.gas_name|add_class:"form-control" }}
+                </div>
+                <div class="form-group">
+                    <label class="control-label">La quantité :</label>
+                    {{ form.gas_quantity|add_class:"form-control" }}
+                </div>
+
+                <input class="center-block btn btn-primary btn-lg" type="submit" value="Continuer"/>
+            </form>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{% static 'js/calendar.js' %}"></script>
 {% endblock %}
