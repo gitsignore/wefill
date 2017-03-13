@@ -150,6 +150,15 @@ API = {
     }
 }
 
+PAYPAL_API = {
+    'business': 'YOUR_BUSINESS_CODE',
+    'currency_code': 'EUR',
+    'lc': 'FR',
+    'notify_url': 'http://127.0.0.1:8000/validate/',
+    'return_url': 'http://127.0.0.1:8000/order/summary/',
+    'cancel_return': 'http://127.0.0.1:8000/payment/',
+}
+
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 
 PAYPAL_TEST = True
