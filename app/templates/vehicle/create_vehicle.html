@@ -1,5 +1,17 @@
-<h1>Ajouter un véhicule</h1>
 
-<form action="{% url 'create_vehicle' %}" method="post">
-    {% include "form/form_snippet.html" %}
-</form>
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/calendar.css' %}"/>
+{% endblock %}
+{% block content %}
+    {% include '../navbar/navbar.html' %}
+    <div class="login">
+      <h1>
+        <div class="test" data-text="Ajouter un véhicule"></div>
+      </h1>
+      <form action="{% url 'create_vehicle' %}" method="post">
+        {% include "form/form_snippet.html" %}
+      </form>
+    </div>
+{% endblock %}

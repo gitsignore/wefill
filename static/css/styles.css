@@ -416,6 +416,12 @@ footer ul li {
      webkit-font-smoothing: antialiased;
 }
 
+.login h1 {
+  font-size: 28px;
+  margin-top: 60px;
+  webkit-font-smoothing: antialiased;
+}
+
 .login form {
 	width: 380px;
 	margin: 4em auto;
