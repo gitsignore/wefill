@@ -2,7 +2,7 @@
     "use strict"; // Start of use strict
 
     // Display selected date and bind date field
-    $(document).bind('click', '.list-group button', function (event) {
+    $(document).on('click', '.list-group button', function () {
         var $element = $(this);
         var hour = $element.attr("data-src");
         var day = $element.parent().attr("data-src");
@@ -15,7 +15,7 @@
     });
 
     // Display hours on day selection
-    $(document).on('click', '.day', function (event) {
+    $(document).on('click', '.day', function () {
         var $element = $(this);
         var day = ($element.children().text().length == 1) ? '0' + $element.children().text() : $element.children().text();
         var $old_element = $('.show');
@@ -29,9 +29,12 @@
         $new_element.addClass("show");
     });
 
+    // Get current date
     var date = new Date();
+    // Load actual month calendar on page load
     $("#calendar").load('/calendar/' + date.getFullYear() + '/' + date.getMonth());
 
+    // Ajax call to change calendar date on click
     $(document).on('click', '.load', function (event) {
         $('#calendar').load($(this).attr('href'));
         event.preventDefault();

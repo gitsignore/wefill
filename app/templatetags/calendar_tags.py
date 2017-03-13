@@ -4,30 +4,12 @@ import locale
 from calendar import HTMLCalendar
 from django import template
 from datetime import date
-from itertools import groupby
 
-from django.utils.html import conditional_escape as esc
 
 register = template.Library()
 
 
-day_schedules = (
-    '09:00 - 10:00',
-    '10:00 - 11:00',
-    '11:00 - 12:00',
-    '12:00 - 13:00',
-    '13:00 - 14:00',
-    '14:00 - 15:00',
-    '15:00 - 16:00',
-    '16:00 - 17:00',
-    '17:00 - 18:00',
-    '18:00 - 19:00',
-    '19:00 - 20:00',
-    '20:00 - 21:00',
-)
-
-
-def do_event_calendar(parser, token):
+def do_calendar(parser, token):
     """
     The template tag's syntax is {% event_calendar year month event_list %}
     """
@@ -56,10 +38,9 @@ class EventCalendarNode(template.Node):
     def render(self, context):
         try:
             # Get the variables from the context so the method is thread-safe.
-            my_event_list = self.event_list.resolve(context)
             my_year = self.year.resolve(context)
             my_month = self.month.resolve(context)
-            cal = EventCalendar(my_event_list)
+            cal = EventCalendar()
             return cal.formatmonth(int(my_year), int(my_month))
         except ValueError:
             return
@@ -73,9 +54,8 @@ class EventCalendar(HTMLCalendar):
     each day's table cell.
     """
 
-    def __init__(self, events):
+    def __init__(self):
         super(EventCalendar, self).__init__()
-        self.events = self.group_by_day(events)
 
     def formatday(self, day, weekday):
         if day != 0:
@@ -92,20 +72,8 @@ class EventCalendar(HTMLCalendar):
         self.year, self.month = year, month
         return super(EventCalendar, self).formatmonth(year, month)
 
-    def group_by_day(self, events):
-        groups = {}
-        # data = sorted(events, key=lambda x: x['date_refill'])
-
-        for key, group in groupby(events, lambda x: x['date_refill'][:10]):
-            list_of = []
-            for thing in group:
-                list_of.append(thing)
-            groups.update({key: list_of})
-
-        return groups
-
     def day_cell(self, cssclass, body):
         return '<td class="%s">%s</td>' % (cssclass, body)
 
 # Register the template tag so it is available to templates
-register.tag("event_calendar", do_event_calendar)
+register.tag("calendar", do_calendar)

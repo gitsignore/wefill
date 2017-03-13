@@ -26,7 +26,7 @@ DAY_SCHEDULES = (
 )
 
 
-def do_events(parser, token):
+def do_schedules(parser, token):
     """
     The template tag's syntax is {% event_calendar year month event_list %}
     """
@@ -117,4 +117,4 @@ class EventCalendarNode(template.Node):
         return groups
 
 # Register the template tag so it is available to templates
-register.tag("events", do_events)
+register.tag("schedules", do_schedules)

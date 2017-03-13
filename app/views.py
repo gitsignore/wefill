@@ -1,4 +1,4 @@
-from calendar import monthrange, calendar
+from calendar import calendar
 from datetime import date, datetime
 from django.shortcuts import render
 from app.decorators import auth_required
@@ -195,10 +195,6 @@ def book(request):
         """
     token = request.session['user']['token']
     user = api_get_user(request.session['user']['email'], token)
-    orders = api_get_orders(token)
-    orders[0]['date_refill'] = '2017-03-16T09:00:00Z'
-    orders[1]['date_refill'] = '2017-03-17T10:00:00Z'
-    orders[2]['date_refill'] = '2017-03-16T11:00:00Z'
     gas_choices = api_get_gas(request.session['user']['token'])
     if request.method == 'POST':
         form = OrderForm(request.POST, user['address_set'], user['vehicle_set'], gas_choices)
@@ -219,39 +215,9 @@ def book(request):
 
     form = OrderForm(None, user['address_set'], user['vehicle_set'], gas_choices)
 
-    my_year = int(2017)
-    my_month = int(3)
-    my_calendar_from_month = datetime(my_year, my_month, 1)
-    my_calendar_to_month = datetime(my_year, my_month, monthrange(my_year, my_month)[1])
-
-    # Calculate values for the calendar controls. 1-indexed (Jan = 1)
-    my_previous_year = my_year
-    my_previous_month = my_month - 1
-    if my_previous_month == 0:
-        my_previous_year = my_year - 1
-        my_previous_month = 12
-    my_next_year = my_year
-    my_next_month = my_month + 1
-    if my_next_month == 13:
-        my_next_year = my_year + 1
-        my_next_month = 1
-    my_year_after_this = my_year + 1
-    my_year_before_this = my_year - 1
     return render(request, "book.html", {
         'user': user,
         'form': form,
-        'event_list': orders,
-        'month': my_month,
-        'month_name': named_month(my_month),
-        'year': my_year,
-        'previous_month': my_previous_month,
-        'previous_month_name': named_month(my_previous_month),
-        'previous_year': my_previous_year,
-        'next_month': my_next_month,
-        'next_month_name': named_month(my_next_month),
-        'next_year': my_next_year,
-        'year_before_this': my_year_before_this,
-        'year_after_this': my_year_after_this,
     })
 
 
