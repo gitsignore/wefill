@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 {% load static %}
 {% block stylesheets %}
@@ -14,4 +13,7 @@
         {% include "form/form_snippet.html" %}
       </form>
     </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'js/typeWriter.js' %}"></script>
 {% endblock %}
