@@ -41,10 +41,7 @@ def get_call(url, params=None, headers=None):
     if response.status_code == 401:
         raise RedirectException(reverse('logout'))
 
-    if 200 <= response.status_code < 400:
-        return response.json()
-
-    return False
+    return response
 
 
 def post_call(url, params=None, json=None, headers=None):
@@ -64,10 +61,7 @@ def post_call(url, params=None, json=None, headers=None):
     if response.status_code == 401:
         raise RedirectException(reverse('logout'))
 
-    if 200 <= response.status_code < 400:
-        return response.json()
-
-    return False
+    return response
 
 
 def put_call(url, params=None, headers=None):
@@ -86,10 +80,7 @@ def put_call(url, params=None, headers=None):
     if response.status_code == 401:
         raise RedirectException(reverse('logout'))
 
-    if 200 <= response.status_code < 400:
-        return response.json()
-
-    return False
+    return response
 
 
 def delete_call(url, headers=None):
@@ -104,10 +95,7 @@ def delete_call(url, headers=None):
     if response.status_code == 401:
         raise RedirectException(reverse('logout'))
 
-    if 200 <= response.status_code < 400:
-        return response.json()
-
-    return False
+    return response
 
 
 def login(params):
