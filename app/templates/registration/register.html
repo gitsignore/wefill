@@ -1,34 +1,29 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Inscription{% endblock %}
 
 {% block content %}
     <div class="login">
-        <h2>S'inscrire</h2>
-        <form method="post">
-            {% if errors %}
-                <ol>
-                    {% for key, error in errors.items %}
-                        {% if key != 'username' %}
-                            <li><strong>{{ error.0|escape }}</strong></li>
-                        {% endif %}
-                    {% endfor %}
-                </ol>
-            {% endif %}
-            {% csrf_token %}
-            {% for hidden in form.hidden_fields %}
-                {{ hidden }}
+      <a href="{% url 'wefill' %}"><img  id="logo_login" alt='wefill' src="{% static 'images/logo.png' %}"></a>
+      <h2>S'inscrire</h2>
+      <form method="post">
+          {% if errors %}
+              <ol>
+                  {% for error in errors %}
+                      <li><strong>{{ error|escape }}</strong></li>
+                  {% endfor %}
+              </ol>
+          {% endif %}
+          {% csrf_token %}
+            {% for form_loop in form %}
+              <div class="group">
+                {{ form_loop }}
+                <span class="highlight"></span><span class="bar"></span>
+                <label>{{ form_loop.name }}</label>
+              </div>
             {% endfor %}
-            {% for form_loop in form.visible_fields %}
-                <div class="group">
-                    {{ form_loop }}
-                    <span class="highlight"></span><span class="bar"></span>
-                    <label>{{ form_loop.name }}</label>
-                </div>
-            {% endfor %}
-            <button class="button buttonBlue" type="submit">Créer mon compte
-                <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
-            </button>
-        </form>
+          <button class="button buttonBlue" type="submit">Create Account
+          <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div></button>
+      </form>
     </div>
 {% endblock %}

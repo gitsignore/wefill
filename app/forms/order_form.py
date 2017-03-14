@@ -22,7 +22,7 @@ class OrderForm(forms.Form):
     address = forms.ChoiceField()
     vehicle = forms.ChoiceField()
     gas_name = forms.ChoiceField()
-    gas_quantity = forms.ChoiceField(widget=forms.Select, choices=GAS_QUANTITY)
+    gas_quantity = forms.ChoiceField(widget=forms.Select(attrs={'class':'selectpicker'}), choices=GAS_QUANTITY)
     date_refill = forms.DateTimeField(widget=forms.HiddenInput())
 
     def __init__(self, data=None, addresses=None, vehicles=None, gas_choices=None, *args, **kwargs):
