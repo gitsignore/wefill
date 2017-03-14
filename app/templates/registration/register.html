@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Inscription{% endblock %}
 
 {% block content %}
     <div class="login">
+      <a href="{% url 'wefill' %}"><img  id="logo_login" alt='wefill' src="{% static 'images/logo.png' %}"></a>
       <h2>S'inscrire</h2>
       <form method="post">
           {% if errors %}

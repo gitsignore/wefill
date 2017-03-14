@@ -18,9 +18,10 @@ h1 {
 .form-control[readonly],
 fieldset[disabled] {
     border: 1px solid rgba(1, 1, 1, 0.3);
-    background: none;
+    background: #fff;
     border-radius: 4px;
     color: #eee;
+    color:#000;
 }
 
 .form-control option,
@@ -126,4 +127,20 @@ button.list-group-item:hover {
 .list-group .active:hover,
 .list-group .active:focus {
     background: rgba(26, 139, 188, 0.7);
+}
+#margin-bottom > div > div > form > div > label{
+  font-size: 18px;
+}
+
+#margin-bottom > div > div > form > input {
+  float: right;
+  margin-bottom: 50px;
+}
+#date{
+  text-align: center;
+  font-size: 16px;
+  background: rgb(34,34,34); /* for IE */
+  background: rgba(34,34,34,0.5);
+  padding: 10px;
+  border-radius: 10px;
 }
