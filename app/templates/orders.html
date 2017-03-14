@@ -1,1 +1,5 @@
-<h1>orders</h1>
+<h1>Mes commandes</h1>
+
+{% for order in orders %}
+    <h2>Commande n°{{ order.id }}</h2>
+{% endfor %}

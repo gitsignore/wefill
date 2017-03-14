@@ -84,8 +84,13 @@ WSGI_APPLICATION = 'wefill.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),  # Or path to database file if using sqlite3.
+       # The following settings are not used with sqlite3:
+       # 'USER': 'myuser',
+       # 'PASSWORD': 'password',
+       # 'HOST': 'localhost',  # '127.0.0.1' for localhost through TCP.
+       # 'PORT': '',  # Set to empty string for default.
     }
 }
 
@@ -148,6 +153,15 @@ API = {
             'gas': '/api/v1/gas/',
         },
     }
+}
+
+PAYPAL_API = {
+    'business': 'YOUR_BUSINESS_CODE',
+    'currency_code': 'EUR',
+    'lc': 'FR',
+    'notify_url': 'http://127.0.0.1:8000/validate/',
+    'return_url': 'http://127.0.0.1:8000/order/summary/',
+    'cancel_return': 'http://127.0.0.1:8000/payment/',
 }
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
