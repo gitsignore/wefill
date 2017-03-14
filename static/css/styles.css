@@ -637,3 +637,49 @@ footer ul li {
     opacity: 0;
   }
 }
+
+.wrapper {
+  overflow:hidden;
+}
+
+.wrapper div {
+   min-height: 200px;
+   padding: 40px;
+}
+.one {
+  float:left;
+
+}
+.two {
+  overflow:hidden;
+  min-height:170px;
+}
+
+@media screen and (max-width: 400px) {
+   .one {
+    float: none;
+    margin-right:0;
+    width:auto;
+
+  }
+}
+.test{
+  text-align: center;
+}
+
+#search {
+  margin-top: 75px;
+  padding: 20px;
+  width: 300px;
+  background: rgb(34,34,34); /* for IE */
+  background: rgba(34,34,34,0.75);
+}
+body > div.wrapper > div.two > table > tbody > tr:hover{
+  background: rgb(34,34,34); /* for IE */
+  background: rgba(34,34,34,0.75);
+}
+
+body > div.wrapper > div.one > table > tbody > tr:hover{
+  background: rgb(34,34,34); /* for IE */
+  background: rgba(34,34,34,0.75);
+}

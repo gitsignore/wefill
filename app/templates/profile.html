@@ -1,17 +1,75 @@
-<h1>Your email : {{ user.email }}</h1>
-<h1>Your first name : {{ user.firstname }}</h1>
-<h1>Your last name : {{ user.lastname }}</h1>
-
-{% for address in user.address_set %}
-    <h2>Address name : {{ address.name }}</h2>
-    <h2>Address street : {{ address.street }}</h2>
-    <h2>Address city : {{ address.city }}</h2>
-    <h2>Address zip : {{ address.zip }}</h2>
-{% endfor %}
-
-{% for vehicle in user.vehicle_set %}
-    <h2>Nom : {{ vehicle.name }}</h2>
-    <h2>Marque : {{ vehicle.brand }}</h2>
-    <h2>Plaque d'immatriculation : {{ vehicle.plate }}</h2>
-    <h2>Couleur : {{ vehicle.color }}</h2>
-{% endfor %}
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/table.css' %}"/>
+{% endblock %}
+{% block content %}
+    {% include './navbar/navbar.html' %}
+    <div class="row">
+      <div class="col-xs-4	col-sm-4	col-md-4	col-lg-4">
+          <div id="search">
+            <b>Email:</b>
+            {{ user.email }}<br/>
+            <b>Prénom:</b>
+            {{ user.firstname }}<br/>
+            <b>Nom:</b>
+            {{ user.lastname }}
+          </div>
+      </div>
+    </div>
+    <div class="position-top"></div>
+    <div class="wrapper">
+      <div class="one">
+          <h1>
+            Address
+          </h1>
+        <input type="button" value="+" class="btn btn-success" onclick="window.open('{% url 'create_address' %}')"/>
+        <table class="table table-hover table-inverse">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Street</th>
+              <th>City</th>
+              <th>Zip</th>
+            </tr>
+          </thead>
+          <tbody>
+              {% for address in user.address_set %}
+                <tr>
+                  <td>{{ address.name }}</td>
+                  <td>{{ address.street }}</td>
+                  <td>{{ address.city }}</td>
+                  <td>{{ address.zip }}</td>
+                </tr>
+              {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="two">
+            <h1>
+              Vehicle
+            </h1>
+          <input type="button" value="+" class="btn btn-success" onclick="window.open('{% url 'create_vehicle' %}')"/>
+          <table class="table table-hover table-inverse">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Brand</th>
+                <th>License Plate</th>
+                <th>Color</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for vehicle in user.vehicle_set %}
+                <tr>
+                    <td>{{ vehicle.name }}</td>
+                    <td>{{ vehicle.brand }}</td>
+                    <td>{{ vehicle.plate }}</td>
+                    <td>{{ vehicle.color }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,8 @@
+body {
+    background: url("../images/bg-pattern.png"), #43977b;
+    /* fallback for old browsers */
+    background: url("../images/bg-pattern.png"), -webkit-linear-gradient(to left, #43977b, #435f97);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: url("../images/bg-pattern.png"), linear-gradient(to left, #43977b, #435f97);
+    color: #fff;
+}
