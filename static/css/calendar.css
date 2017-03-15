@@ -95,7 +95,9 @@ tr .month {
     background: rgba(1, 1, 1, 0.4);
 }
 
-.today {
+.today,
+.today:hover {
+    cursor: default;
     background: rgba(26, 188, 139, 0.7);
     color: #ffffff !important;
 }

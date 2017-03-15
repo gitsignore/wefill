@@ -3,7 +3,7 @@ from __future__ import print_function
 import locale
 from calendar import HTMLCalendar
 from django import template
-from datetime import date
+from datetime import date, timedelta
 
 
 register = template.Library()
@@ -62,8 +62,10 @@ class EventCalendar(HTMLCalendar):
             cssclass = self.cssclasses[weekday]
             cssclass += ' day'
             if date.today() == date(self.year, self.month, day):
-                cssclass += ' today active'
-            if date.today() >= date(self.year, self.month, day):
+                cssclass = 'noday today'
+            if (date.today() + timedelta(days=1)) == date(self.year, self.month, day):
+                cssclass += ' active'
+            if date.today() > date(self.year, self.month, day):
                 cssclass = 'noday'
             return self.day_cell(cssclass, '<span class="dayNumberNoEvents">%d</span>' % (day))
         return self.day_cell('noday', '&nbsp;')
