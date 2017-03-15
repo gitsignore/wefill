@@ -39,13 +39,17 @@ In your browser go to : http://127.0.0.1:8000
 
 ## Screenshot
 Home page:
+
 ![](https://github.com/TataneInYourFace/wefill/blob/master/readme-sources/home.gif?raw=true)
 
 Error 404:
+
 ![](https://github.com/TataneInYourFace/wefill/blob/master/readme-sources/err404.gif?raw=true)
 
 Booking:
+
 ![](https://github.com/TataneInYourFace/wefill/blob/master/readme-sources/book.gif?raw=true)
 
 Profile:
+
 ![](https://github.com/TataneInYourFace/wefill/blob/master/readme-sources/account.gif?raw=true)
