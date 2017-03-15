@@ -416,6 +416,11 @@ footer ul li {
      webkit-font-smoothing: antialiased;
 }
 
+.login ul {
+    color: #eea236;
+    list-style: none;
+}
+
 .login h1 {
   font-size: 28px;
   margin-top: 60px;

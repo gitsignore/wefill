@@ -2,6 +2,8 @@ import calendar as cal
 from django.conf import settings
 from calendar import calendar
 from datetime import date, datetime
+
+from django.contrib import messages
 from django.shortcuts import render
 from app.decorators import auth_required, admin_required
 from app.forms import LoginForm, RegisterForm, AddressForm, VehicleForm, GasForm, OrderForm
@@ -274,6 +276,12 @@ def book(request):
     gas_choices_response = api_get_gas(request.session['user']['token'])
     if user_response.ok and gas_choices_response.ok:
         user = user_response.json()
+        if not user['address_set']:
+            messages.warning(request, 'Vous devez créer une adresse.')
+            return HttpResponseRedirect(reverse('create_address'))
+        if not user['vehicle_set']:
+            messages.warning(request, 'Vous devez ajouter un véhicule.')
+            return HttpResponseRedirect(reverse('create_vehicle'))
         gas_choices = gas_choices_response.json()
         if request.method == 'POST':
             form = OrderForm(request.POST, user['address_set'], user['vehicle_set'], gas_choices)

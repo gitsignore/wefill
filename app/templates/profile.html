@@ -21,17 +21,16 @@
     <div class="wrapper">
       <div class="one">
           <h1>
-            Address
+            Mes adresses
           </h1>
         <input type="button" value="+" class="btn btn-success" onclick="window.open('{% url 'create_address' %}')"/>
         <table class="table table-hover table-inverse">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Street</th>
-              <th>City</th>
-              <th>Zip</th>
-              <th>Zip</th>
+              <th>Nom</th>
+              <th>Rue</th>
+              <th>Ville</th>
+              <th>Code postal</th>
               <th><img width="20px" src="{% static 'images/delete.png' %}"></th>
             </tr>
           </thead>
@@ -52,16 +51,16 @@
       </div>
       <div class="two">
             <h1>
-              Vehicle
+              Mes véhicules
             </h1>
           <input type="button" value="+" class="btn btn-success" onclick="window.open('{% url 'create_vehicle' %}')"/>
           <table class="table table-hover table-inverse">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Brand</th>
-                <th>License Plate</th>
-                <th>Color</th>
+                <th>Nom</th>
+                <th>Marque</th>
+                <th>Plaque d'immatriculation</th>
+                <th>Couleur</th>
                 <th><img width="20px" src="{% static 'images/delete.png' %}"></th>
               </tr>
             </thead>

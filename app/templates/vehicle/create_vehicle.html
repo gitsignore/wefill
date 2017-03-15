@@ -6,12 +6,19 @@
 {% block content %}
     {% include '../navbar/navbar.html' %}
     <div class="login">
-      <h1>
-        <div class="test" data-text="Ajouter un véhicule"></div>
-      </h1>
-      <form action="{% url 'create_vehicle' %}" method="post">
-        {% include "form/form_snippet.html" %}
-      </form>
+        <h1>
+            <div class="test" data-text="Ajouter un véhicule"></div>
+        </h1>
+        <form action="{% url 'create_vehicle' %}" method="post">
+            {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {% include "form/form_snippet.html" %}
+        </form>
     </div>
 {% endblock %}
 {% block javascripts %}
