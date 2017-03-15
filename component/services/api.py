@@ -133,6 +133,19 @@ def get_user(user_email, token):
     return get_call(url, headers=headers)
 
 
+def edit_user(user, token):
+    """
+    Edit user
+    :param user:
+    :param token:
+    :return:
+    """
+    url = get_url('users', user['email'] + '/')
+    headers = header_token(token)
+
+    return put_call(url, params=user, headers=headers)
+
+
 def get_address(address_id, token):
     """
     Retieve user address
@@ -166,7 +179,7 @@ def edit_address(address, token):
     :param token:
     :return:
     """
-    url = get_url('addresses', address['id'])
+    url = get_url('addresses', address['id'] + '/')
     headers = header_token(token)
 
     return put_call(url, params=address, headers=headers)
@@ -218,7 +231,7 @@ def edit_vehicle(vehicle, token):
     :param token:
     :return:
     """
-    url = get_url('vehicles', vehicle['id'])
+    url = get_url('vehicles', vehicle['id'] + '/')
     headers = header_token(token)
 
     return put_call(url, params=vehicle, headers=headers)

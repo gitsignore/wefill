@@ -2,16 +2,16 @@ import calendar as cal
 from django.conf import settings
 from calendar import calendar
 from datetime import date, datetime
-
 from django.contrib import messages
 from django.shortcuts import render
 from app.decorators import auth_required, admin_required
-from app.forms import LoginForm, RegisterForm, AddressForm, VehicleForm, GasForm, OrderForm
+from app.forms import LoginForm, RegisterForm, ProfileForm, AddressForm, VehicleForm, GasForm, OrderForm
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from component.services.api import login as api_login
 from component.services.api import register as api_register
 from component.services.api import get_user as api_get_user
+from component.services.api import edit_user as api_edit_user
 from component.services.api import get_address as api_get_address
 from component.services.api import get_vehicle as api_get_vehicle
 from component.services.api import create_address as api_create_address
@@ -98,6 +98,29 @@ def profile(request):
 
 
 @auth_required
+def edit_profile(request):
+    response = api_get_user(request.session['user']['email'], request.session['user']['token'])
+    if response.ok:
+        user = response.json()
+        if request.method == 'POST':
+            form = ProfileForm(request.POST)
+            if form.is_valid():
+                data = form.cleaned_data
+                user['lastname'] = data['lastname']
+                user['firstname'] = data['firstname']
+                response = api_edit_user(user, request.session['user']['token'])
+                if response.ok:
+                    return HttpResponseRedirect(reverse('profile'))
+                return render(request, 'profile/edit.html', {
+                    'form': form, 'errors': response.json()['errors']
+                })
+
+        form = ProfileForm(initial=user)
+        return render(request, 'profile/edit.html', {'form': form})
+    return HttpResponseRedirect(reverse('logout'))
+
+
+@auth_required
 def create_address(request):
     if request.method == 'POST':
         form = AddressForm(request.POST)
@@ -126,6 +149,7 @@ def edit_address(request, address_id):
             if form.is_valid():
                 data = form.cleaned_data
                 data['user'] = request.session['user']['id']
+                data['id'] = str(response.json()['id'])
                 response = api_edit_address(data, request.session['user']['token'])
                 if response.ok:
                     return HttpResponseRedirect(reverse('profile'))
@@ -176,6 +200,7 @@ def edit_vehicle(request, vehicle_id):
             if form.is_valid():
                 data = form.cleaned_data
                 data['user'] = request.session['user']['id']
+                data['id'] = str(response.json()['id'])
                 response = api_edit_vehicle(data, request.session['user']['token'])
                 if response.ok:
                     return HttpResponseRedirect(reverse('profile'))
@@ -185,7 +210,7 @@ def edit_vehicle(request, vehicle_id):
         else:
             form = VehicleForm(initial=vehicle)
 
-        return render(request, 'vehicle/edit_vehicle.html', {'form': form})
+        return render(request, 'vehicle/edit_vehicle.html', {'form': form, 'id': vehicle_id})
     return HttpResponseRedirect(reverse('profile'))
 
 
@@ -265,7 +290,10 @@ def orders(request):
     response = api_get_orders(request.session['user']['token'])
 
     if response.ok:
-        return render(request, 'orders.html', {'orders': response.json()})
+        orders = response.json()
+        for index, order in enumerate(orders):
+            orders[index]['date_refill'] = datetime.strptime(order['date_refill'], '%Y-%m-%dT%H:%M:%SZ')
+        return render(request, 'orders.html', {'orders': orders})
     return HttpResponseRedirect(reverse('logout'))
 
 
@@ -325,7 +353,7 @@ def payment(request):
             paypal_dict = paypal_build_params(order, user)
 
             form = PayPalPaymentsForm(initial=paypal_dict)
-            context = {"form": form}
+            context = {'form': form, 'order': order, 'amount': order['gas_quantity'] * order['gas_price']}
             request.session['order'] = order
 
             return render(request, "payment.html", context)

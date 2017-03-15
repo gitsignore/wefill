@@ -6,78 +6,97 @@
 {% block content %}
     {% include './navbar/navbar.html' %}
     <div class="row">
-      <div class="col-xs-4	col-sm-4	col-md-4	col-lg-4">
-          <div id="search">
-            <b>Email:</b>
-            {{ user.email }}<br/>
-            <b>Prénom:</b>
-            {{ user.firstname }}<br/>
-            <b>Nom:</b>
-            {{ user.lastname }}
-          </div>
-      </div>
+        <div class="col-xs-4	col-sm-4	col-md-4	col-lg-4">
+            <div id="search">
+                <a type="button" class="btn btn-warning pull-right" href="{% url 'edit_profile' %}">
+                    <i class="icon-note"></i>
+                </a>
+                <b>Email:</b>
+                {{ user.email }}<br/>
+                <b>Prénom:</b>
+                {{ user.firstname }}<br/>
+                <b>Nom:</b>
+                {{ user.lastname }}
+            </div>
+        </div>
     </div>
     <div class="position-top"></div>
     <div class="wrapper">
-      <div class="one">
-          <h1>
-            Mes adresses
-          </h1>
-        <input type="button" value="+" class="btn btn-success" onclick="window.open('{% url 'create_address' %}')"/>
-        <table class="table table-hover table-inverse">
-          <thead>
-            <tr>
-              <th>Nom</th>
-              <th>Rue</th>
-              <th>Ville</th>
-              <th>Code postal</th>
-              <th><img width="20px" src="{% static 'images/delete.png' %}"></th>
-            </tr>
-          </thead>
-          <tbody>
-              {% for address in user.address_set %}
-                <tr>
-                  <td>{{ address.name }}</td>
-                  <td>{{ address.street }}</td>
-                  <td>{{ address.city }}</td>
-                  <td>{{ address.zip }}</td>
-                  <td>
-                    <input type="button" value="-" class="btn btn-danger" onclick="window.open('{% url 'delete_address' address.id %}')"/>
-                  </td>
-                </tr>
-              {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      <div class="two">
+        <div class="one">
             <h1>
-              Mes véhicules
+                Mes adresses
+                <a type="button" class="btn btn-success pull-right" href="{% url 'create_address' %}"><i class="icon-plus"></i></a>
             </h1>
-          <input type="button" value="+" class="btn btn-success" onclick="window.open('{% url 'create_vehicle' %}')"/>
-          <table class="table table-hover table-inverse">
-            <thead>
-              <tr>
-                <th>Nom</th>
-                <th>Marque</th>
-                <th>Plaque d'immatriculation</th>
-                <th>Couleur</th>
-                <th><img width="20px" src="{% static 'images/delete.png' %}"></th>
-              </tr>
-            </thead>
-            <tbody>
-                {% for vehicle in user.vehicle_set %}
+            <table class="table table-hover table-inverse">
+                <thead>
                 <tr>
-                    <td>{{ vehicle.name }}</td>
-                    <td>{{ vehicle.brand }}</td>
-                    <td>{{ vehicle.plate }}</td>
-                    <td>{{ vehicle.color }}</td>
-                    <td>
-                      <input type="button" value="-" class="btn btn-danger" onclick="window.open('{% url 'delete_vehicle' vehicle.id %}')"/>
-                    </td>
+                    <th>Nom</th>
+                    <th>Rue</th>
+                    <th>Ville</th>
+                    <th>Code postal</th>
+                    <th>Modifier</th>
+                    <th><img width="20px" src="{% static 'images/delete.png' %}"></th>
                 </tr>
+                </thead>
+                <tbody>
+                {% for address in user.address_set %}
+                    <tr>
+                        <td>{{ address.name }}</td>
+                        <td>{{ address.street }}</td>
+                        <td>{{ address.city }}</td>
+                        <td>{{ address.zip }}</td>
+                        <td>
+                            <a type="button" class="btn btn-warning" href="{% url 'edit_address' address.id %}">
+                                <i class="icon-note"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a type="button" class="btn btn-danger" href="{% url 'delete_address' address.id %}">
+                                <i class="icon-minus"></i>
+                            </a>
+                        </td>
+                    </tr>
                 {% endfor %}
-            </tbody>
-          </table>
+                </tbody>
+            </table>
+        </div>
+        <div class="two">
+            <h1>
+                Mes véhicules
+                <a type="button" class="btn btn-success pull-right" href="{% url 'create_vehicle' %}"><i class="icon-plus"></i></a>
+            </h1>
+            <table class="table table-hover table-inverse">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Marque</th>
+                    <th>Plaque d'immatriculation</th>
+                    <th>Couleur</th>
+                    <th>Modifier</th>
+                    <th><img width="20px" src="{% static 'images/delete.png' %}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for vehicle in user.vehicle_set %}
+                    <tr>
+                        <td>{{ vehicle.name }}</td>
+                        <td>{{ vehicle.brand }}</td>
+                        <td>{{ vehicle.plate }}</td>
+                        <td>{{ vehicle.color }}</td>
+                        <td>
+                            <a type="button" class="btn btn-warning" href="{% url 'edit_vehicle' vehicle.id %}">
+                                <i class="icon-note"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a type="button" class="btn btn-danger" href="{% url 'delete_vehicle' vehicle.id %}">
+                                <i class="icon-minus"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-  </div>
 {% endblock %}

@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^accounts/register/$', views.register, name='register'),
     url(r'^accounts/logout/$', views.logout, name='logout'),
     url(r'^profile/$', views.profile, name='profile'),
+    url(r'^profile/edit/$', views.edit_profile, name='edit_profile'),
     url(r'^user/address/create/$', views.create_address, name='create_address'),
     url(r'^user/vehicle/create/$', views.create_vehicle, name='create_vehicle'),
     url(r'^user/address/(\d+)/$', views.edit_address, name='edit_address'),

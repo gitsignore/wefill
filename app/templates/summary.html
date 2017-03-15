@@ -1,1 +1,19 @@
-<h1>Merci pour votre paiement.</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/table.css' %}"/>
+{% endblock %}
+{% block content %}
+    {% include 'navbar/navbar.html' %}
+    <div class="login">
+        <h1 class="text-center">
+            <div class="test" data-text="Merci pour votre paiement."></div>
+        </h1>
+        <div class="center-block" style="width: 50px">
+            <a class="btn btn-success" href="{% url 'orders' %}">Mes commandes</a>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'js/typeWriter.js' %}"></script>
+{% endblock %}

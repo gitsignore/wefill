@@ -1,3 +1,22 @@
-<h1>Paiement</h1>
-<!-- writes out the form tag automatically -->
-{{ form.render }}
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/table.css' %}"/>
+{% endblock %}
+{% block content %}
+    {% include 'navbar/navbar.html' %}
+    <div class="login">
+        <h1>
+            <div class="test" data-text="Paiement"></div>
+            <h3 class="text-center">Récapitulatif de ma commande : </h3>
+            <p class="text-center">Type de carburant : {{ order.gas_name }}</p>
+            <p class="text-center">Quantité : {{ order.gas_quantity }} L</p>
+            <p class="text-center">Montant total : {{ amount }} €</p>
+        </h1>
+        <!-- writes out the form tag automatically -->
+        {{ form.render }}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'js/typeWriter.js' %}"></script>
+{% endblock %}
