@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/table.css' %}"/>
+{% endblock %}
+{% block content %}
+    {% include '../navbar/navbar.html' %}
+    <div class="login">
+      <h1>
+        <div class="test" data-text="Ajouter un carburant"></div>
+      </h1>
+      <form action="{% url 'create_gas' %}" method="post">
+          {% include "form/form_snippet.html" %}
+      </form>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'js/typeWriter.js' %}"></script>
+{% endblock %}

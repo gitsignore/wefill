@@ -63,7 +63,7 @@ class EventCalendar(HTMLCalendar):
             cssclass += ' day'
             if date.today() == date(self.year, self.month, day):
                 cssclass += ' today active'
-            if date.today() > date(self.year, self.month, day):
+            if date.today() >= date(self.year, self.month, day):
                 cssclass = 'noday'
             return self.day_cell(cssclass, '<span class="dayNumberNoEvents">%d</span>' % (day))
         return self.day_cell('noday', '&nbsp;')

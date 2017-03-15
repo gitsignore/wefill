@@ -262,6 +262,57 @@ def get_gas(token):
     return get_call(url, headers=headers)
 
 
+def get_gas_by_id(gas_id, token):
+    """
+    Get gas by id
+    :param token:
+    :return:
+    """
+    url = get_url('gas', gas_id)
+    headers = header_token(token)
+
+    return get_call(url, headers=headers)
+
+
+def create_gas(gas, token):
+    """
+    Create gas
+    :param gas:
+    :param token:
+    :return:
+    """
+    url = get_url('gas')
+    headers = header_token(token)
+
+    return post_call(url, params=gas, headers=headers)
+
+
+def edit_gas(gas, token):
+    """
+    Edit gas
+    :param gas:
+    :param token:
+    :return:
+    """
+    url = get_url('gas', gas['id'])
+    headers = header_token(token)
+
+    return put_call(url, params=gas, headers=headers)
+
+
+def delete_gas(gas_id, token):
+    """
+    Delete gas
+    :param gas_id:
+    :param token:
+    :return:
+    """
+    url = get_url('gas', gas_id)
+    headers = header_token(token)
+
+    return delete_call(url, headers=headers)
+
+
 def get_order(id, token):
     url = get_url('orders', id)
     headers = header_token(token)

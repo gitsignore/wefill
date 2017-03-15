@@ -2,8 +2,8 @@ import calendar as cal
 from calendar import calendar
 from datetime import date, datetime
 from django.shortcuts import render
-from app.decorators import auth_required
-from app.forms import LoginForm, RegisterForm, AddressForm, VehicleForm, OrderForm
+from app.decorators import auth_required, admin_required
+from app.forms import LoginForm, RegisterForm, AddressForm, VehicleForm, GasForm, OrderForm
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from component.services.api import login as api_login
@@ -19,6 +19,10 @@ from component.services.api import delete_address as api_delete_address
 from component.services.api import delete_vehicle as api_delete_vehicle
 from component.services.api import order_validate as api_order_validate
 from component.services.api import get_gas as api_get_gas
+from component.services.api import get_gas_by_id as api_get_gas_by_id
+from component.services.api import create_gas as api_create_gas
+from component.services.api import edit_gas as api_edit_gas
+from component.services.api import delete_gas as api_delete_gas
 from component.services.api import get_orders as api_get_orders
 from component.services.api import get_order as api_get_order
 from component.services.paypal_api import build_params as paypal_build_params
@@ -187,6 +191,70 @@ def delete_vehicle(request, vehicle_id):
     api_delete_vehicle(vehicle_id, request.session['user']['token'])
 
     return HttpResponseRedirect(reverse('profile'))
+
+
+@auth_required
+@admin_required
+def admin(request):
+    today = date.today()
+    gas_response = api_get_gas(request.session['user']['token'])
+    order_response = api_get_orders(request.session['user']['token'], str(today), str(today))
+
+    if gas_response.ok and order_response.ok:
+        order_response = order_response.json()
+        for index, order in enumerate(order_response):
+            order_response[index]['date_refill'] = datetime.strptime(order['date_refill'], '%Y-%m-%dT%H:%M:%SZ')
+        return render(request, 'admin.html', {'gas': gas_response.json(), 'orders': order_response})
+    return HttpResponseRedirect(reverse('wefill'))
+
+
+@auth_required
+@admin_required
+def create_gas(request):
+    if request.method == 'POST':
+        form = GasForm(request.POST)
+        if form.is_valid():
+            response = api_create_gas(form.cleaned_data, request.session['user']['token'])
+            if response.ok:
+                return HttpResponseRedirect(reverse('gas'))
+            return render(request, 'gas/create_gas.html', {
+                'form': form, 'errors': response.json()['errors']
+            })
+    else:
+        form = GasForm()
+
+    return render(request, 'gas/create_gas.html', {'form': form})
+
+
+@auth_required
+@admin_required
+def edit_gas(request, gas_id):
+    response = api_get_gas_by_id(gas_id, request.session['user']['token'])
+
+    if response.ok:
+        gas = response.json()
+        if request.method == 'POST':
+            form = GasForm(request.POST)
+            if form.is_valid():
+                response = api_edit_gas(form.cleaned_data, request.session['user']['token'])
+                if response.ok:
+                    return HttpResponseRedirect(reverse('gas'))
+                return render(request, 'gas/edit_gas.html', {
+                    'form': form, 'errors': response.json()['errors']
+                })
+        else:
+            form = GasForm(initial=gas)
+
+        return render(request, 'gas/edit_gas.html', {'id': gas['id'], 'form': form})
+    return HttpResponseRedirect(reverse('gas'))
+
+
+@auth_required
+@admin_required
+def delete_gas(request, gas_id):
+    api_delete_gas(gas_id, request.session['user']['token'])
+
+    return HttpResponseRedirect(reverse('gas'))
 
 
 @auth_required

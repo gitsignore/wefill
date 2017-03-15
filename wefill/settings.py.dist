@@ -139,6 +139,7 @@ STATICFILES_DIRS = (
 
 # Wich URL to redirect the user after a successful authentication
 LOGIN_REDIRECT_URL = 'login'
+ADMIN_REDIRECT_URL = 'wefill'
 
 API = {
     'default': {

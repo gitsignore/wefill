@@ -9,4 +9,11 @@ def is_authenticated(session):
     return False
 
 
+def is_admin(session):
+    if 'user' in session and 'is_admin' in session:
+        return True
+    return False
+
+
 register.filter('is_authenticated', is_authenticated)
+register.filter('is_admin', is_admin)
