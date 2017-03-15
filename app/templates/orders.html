@@ -1,1 +1,19 @@
-<h1>orders</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/table.css' %}"/>
+{% endblock %}
+{% block content %}
+    {% include './navbar/navbar.html' %}
+    <div class="login">
+      <h1>
+        <div class="test" data-text="Commandes"></div>
+      </h1>
+     {% for address in user.address_set %}
+
+     {% endfor %}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'js/typeWriter.js' %}"></script>
+{% endblock %}
