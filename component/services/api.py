@@ -172,6 +172,19 @@ def edit_address(address, token):
     return put_call(url, params=address, headers=headers)
 
 
+def delete_address(address_id, token):
+    """
+    Delete user address
+    :param address_id:
+    :param token:
+    :return:
+    """
+    url = get_url('addresses', address_id)
+    headers = header_token(token)
+
+    return delete_call(url, headers=headers)
+
+
 def get_vehicle(vehicle_id, token):
     """
     Retrieve user vehicle
@@ -209,6 +222,19 @@ def edit_vehicle(vehicle, token):
     headers = header_token(token)
 
     return put_call(url, params=vehicle, headers=headers)
+
+
+def delete_vehicle(vehicle_id, token):
+    """
+    Delete user vehicle
+    :param vehicle_id:
+    :param token:
+    :return:
+    """
+    url = get_url('vehicles', vehicle_id)
+    headers = header_token(token)
+
+    return delete_call(url, headers=headers)
 
 
 def order_validate(order, token):

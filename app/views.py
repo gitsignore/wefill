@@ -15,6 +15,8 @@ from component.services.api import create_address as api_create_address
 from component.services.api import create_vehicle as api_create_vehicle
 from component.services.api import edit_address as api_edit_address
 from component.services.api import edit_vehicle as api_edit_vehicle
+from component.services.api import delete_address as api_delete_address
+from component.services.api import delete_vehicle as api_delete_vehicle
 from component.services.api import order_validate as api_order_validate
 from component.services.api import get_gas as api_get_gas
 from component.services.api import get_orders as api_get_orders
@@ -131,6 +133,13 @@ def edit_address(request, address_id):
 
 
 @auth_required
+def delete_address(request, address_id):
+    api_delete_address(address_id, request.session['user']['token'])
+
+    return HttpResponseRedirect(reverse('profile'))
+
+
+@auth_required
 def create_vehicle(request):
     if request.method == 'POST':
         form = VehicleForm(request.POST)
@@ -170,6 +179,13 @@ def edit_vehicle(request, vehicle_id):
             form = VehicleForm(initial=vehicle)
 
         return render(request, 'vehicle/edit_vehicle.html', {'form': form})
+    return HttpResponseRedirect(reverse('profile'))
+
+
+@auth_required
+def delete_vehicle(request, vehicle_id):
+    api_delete_vehicle(vehicle_id, request.session['user']['token'])
+
     return HttpResponseRedirect(reverse('profile'))
 
 
