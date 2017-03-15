@@ -36,3 +36,8 @@ $ python manage.py runserver
 ```
 
 In your browser go to : http://127.0.0.1:8000
+
+## Screenshot
+
+![](https://github.com/TataneInYourFace/wefill/blob/master/readme-sources/home.gif?raw=true)
+
