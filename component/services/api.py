@@ -243,8 +243,18 @@ def get_order(id, token):
     return get_call(url, headers=headers)
 
 
-def get_orders(token):
+def get_orders(token, start_date=None, end_date=None):
+    query_params = ''
+    if start_date:
+        query_params += 'start_date=' + start_date
+    if end_date:
+        if len(query_params) < 1:
+            query_params += '?'
+        else:
+            query_params += ' & '
+        query_params += 'end_date=' + end_date
+
     url = get_url('orders')
     headers = header_token(token)
 
-    return get_call(url, headers=headers)
+    return get_call(url, params=query_params, headers=headers)

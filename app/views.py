@@ -1,3 +1,4 @@
+import calendar as cal
 from calendar import calendar
 from datetime import date, datetime
 from django.shortcuts import render
@@ -253,9 +254,12 @@ def calendar(request, year, month):
     Show calendar of events for a given month of a given year.
     """
     token = request.session['user']['token']
-    response = api_get_orders(token)
-    orders = response.json()
     today = date.today()
+    monthrange = cal.monthrange(today.year, today.month)
+    date_start = str(today)[:8] + '01'
+    date_end = str(today)[:8] + str(monthrange[1])
+    response = api_get_orders(token, date_start, date_end)
+    orders = response.json()
     my_year = int(year)
     my_month = int(month)
 
