@@ -41,10 +41,7 @@ def get_call(url, params=None, headers=None):
     if response.status_code == 401:
         raise RedirectException(reverse('logout'))
 
-    if 200 <= response.status_code < 400:
-        return response.json()
-
-    return False
+    return response
 
 
 def post_call(url, params=None, json=None, headers=None):
@@ -64,10 +61,7 @@ def post_call(url, params=None, json=None, headers=None):
     if response.status_code == 401:
         raise RedirectException(reverse('logout'))
 
-    if 200 <= response.status_code < 400:
-        return response.json()
-
-    return False
+    return response
 
 
 def put_call(url, params=None, headers=None):
@@ -86,10 +80,7 @@ def put_call(url, params=None, headers=None):
     if response.status_code == 401:
         raise RedirectException(reverse('logout'))
 
-    if 200 <= response.status_code < 400:
-        return response.json()
-
-    return False
+    return response
 
 
 def delete_call(url, headers=None):
@@ -104,10 +95,7 @@ def delete_call(url, headers=None):
     if response.status_code == 401:
         raise RedirectException(reverse('logout'))
 
-    if 200 <= response.status_code < 400:
-        return response.json()
-
-    return False
+    return response
 
 
 def login(params):
@@ -184,6 +172,19 @@ def edit_address(address, token):
     return put_call(url, params=address, headers=headers)
 
 
+def delete_address(address_id, token):
+    """
+    Delete user address
+    :param address_id:
+    :param token:
+    :return:
+    """
+    url = get_url('addresses', address_id)
+    headers = header_token(token)
+
+    return delete_call(url, headers=headers)
+
+
 def get_vehicle(vehicle_id, token):
     """
     Retrieve user vehicle
@@ -223,6 +224,19 @@ def edit_vehicle(vehicle, token):
     return put_call(url, params=vehicle, headers=headers)
 
 
+def delete_vehicle(vehicle_id, token):
+    """
+    Delete user vehicle
+    :param vehicle_id:
+    :param token:
+    :return:
+    """
+    url = get_url('vehicles', vehicle_id)
+    headers = header_token(token)
+
+    return delete_call(url, headers=headers)
+
+
 def order_validate(order, token):
     """
     Create an order
@@ -255,8 +269,18 @@ def get_order(id, token):
     return get_call(url, headers=headers)
 
 
-def get_orders(token):
+def get_orders(token, start_date=None, end_date=None):
+    query_params = ''
+    if start_date:
+        query_params += 'start_date=' + start_date
+    if end_date:
+        if len(query_params) < 1:
+            query_params += '?'
+        else:
+            query_params += ' & '
+        query_params += 'end_date=' + end_date
+
     url = get_url('orders')
     headers = header_token(token)
 
-    return get_call(url, headers=headers)
+    return get_call(url, params=query_params, headers=headers)

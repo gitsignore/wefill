@@ -42,7 +42,7 @@
                   <td>{{ address.city }}</td>
                   <td>{{ address.zip }}</td>
                   <td>
-                    <input type="button" value="-" class="btn btn-danger" onclick="window.open('{% url 'create_address' %}')"/>
+                    <input type="button" value="-" class="btn btn-danger" onclick="window.open('{% url 'delete_address' address.id %}')"/>
                   </td>
                 </tr>
               {% endfor %}
@@ -72,7 +72,7 @@
                     <td>{{ vehicle.plate }}</td>
                     <td>{{ vehicle.color }}</td>
                     <td>
-                      <input type="button" value="-" class="btn btn-danger" onclick="window.open('{% url 'create_address' %}')"/>
+                      <input type="button" value="-" class="btn btn-danger" onclick="window.open('{% url 'delete_vehicle' vehicle.id %}')"/>
                     </td>
                 </tr>
                 {% endfor %}
