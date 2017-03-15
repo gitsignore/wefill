@@ -1,4 +1,5 @@
 import calendar as cal
+from django.conf import settings
 from calendar import calendar
 from datetime import date, datetime
 from django.shortcuts import render
@@ -278,6 +279,10 @@ def book(request):
             form = OrderForm(request.POST, user['address_set'], user['vehicle_set'], gas_choices)
             if form.is_valid():
                 data = form.cleaned_data
+                if int(data['date_refill'].month) > int(date.today().month) + settings.CALENDAR['months_visibilty']:
+                    return render(request, 'book.html', {
+                        'form': form, 'errors': 'Date invalide'
+                    })
                 data['user'] = request.session['user']['id']
                 for gas_choice in gas_choices:
                     if data['gas_name'] == gas_choice['name']:
@@ -351,6 +356,11 @@ def calendar(request, year, month):
         my_month = int(today.month)
         my_year = int(today.year)
 
+    max_month = int(today.month) + settings.CALENDAR['months_visibilty']
+
+    if my_month > max_month:
+        my_month = max_month
+
     # Calculate values for the calendar controls. 1-indexed (Jan = 1)
     my_previous_year = my_year
     if today.month < my_month:
@@ -361,13 +371,18 @@ def calendar(request, year, month):
     else:
         my_previous_year = ''
         my_previous_month = ''
-    my_next_year = my_year
-    my_next_month = my_month + 1
-    if my_next_month == 13:
-        my_next_year = my_year + 1
-        my_next_month = 1
+    if max_month > my_month:
+        my_next_year = my_year
+        my_next_month = my_month + 1
+        if my_next_month == 13:
+            my_next_year = my_year + 1
+            my_next_month = 1
+    else:
+        my_next_year = ''
+        my_next_month = ''
     my_year_after_this = my_year + 1
     my_year_before_this = my_year - 1
+
     return render(request, "calendar/calendar.html", {
         'event_list': orders,
         'month': my_month,

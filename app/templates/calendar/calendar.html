@@ -7,7 +7,9 @@
             {% if previous_month != '' %}
                 <td width="20%" align="left">&lt;&lt; <a class="load" href="{% url 'calendar' previous_year previous_month %}">{{ previous_month_name }}</a></td>
             {% endif %}
-            <td width="20%" align="right"><a class="load" href="{% url 'calendar' next_year next_month %}">{{ next_month_name }}</a> &gt;&gt;</td>
+            {% if next_month != '' %}
+                <td width="20%" align="right"><a class="load" href="{% url 'calendar' next_year next_month %}">{{ next_month_name }}</a> &gt;&gt;</td>
+            {% endif %}
         </tr>
     </table>
 </div>
