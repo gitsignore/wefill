@@ -2,6 +2,8 @@
 
 Wefill is an educational project to order fuel online.
 
+Require wefill-api : <https://github.com/TataneInYourFace/wefill-api>
+
 ## Requirements
 
 - Python
@@ -9,6 +11,7 @@ Wefill is an educational project to order fuel online.
 - pip install requests
 - pip install django-widget-tweaks
 - pip install django-paypal
+- [wefill-api](https://github.com/TataneInYourFace/wefill-api)
 
 ## Installation
 
