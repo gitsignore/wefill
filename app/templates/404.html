@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/table.css' %}"/>
+{% endblock %}
+
+{% block content %}
+{% include './navbar/navbar.html' %}
+<div id="err">404 NOT FOUND</div>
+<img src="{% static 'images/404.gif' %}" alt="404" class="fix404"/>
+{% endblock %}

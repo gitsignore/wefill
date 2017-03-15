@@ -710,3 +710,16 @@ body > div.wrapper > div.one > table > tbody > tr:hover{
   display: block;
   margin: 0 auto;
 }
+
+.fix404{
+    position:fixed;
+    bottom:0px;
+    left:50%;
+    }
+
+#err{
+  text-align: center;
+  font-size: 80px;
+  color: #fff;
+  margin-top: 150px;
+}

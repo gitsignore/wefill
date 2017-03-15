@@ -1,5 +1,19 @@
-<h1>Mes commandes</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/table.css' %}"/>
+{% endblock %}
+{% block content %}
+    {% include './navbar/navbar.html' %}
+    <div class="login">
+      <h1>
+        <div class="test" data-text="Commandes"></div>
+      </h1>
+     {% for address in user.address_set %}
 
-{% for order in orders %}
-    <h2>Commande n°{{ order.id }}</h2>
-{% endfor %}
+     {% endfor %}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="{% static 'js/typeWriter.js' %}"></script>
+{% endblock %}
