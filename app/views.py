@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import calendar as cal
 from django.conf import settings
 from calendar import calendar
