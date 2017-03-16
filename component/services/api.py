@@ -341,7 +341,7 @@ def get_orders(token, start_date=None, end_date=None):
         if len(query_params) < 1:
             query_params += '?'
         else:
-            query_params += ' & '
+            query_params += '&'
         query_params += 'end_date=' + end_date
 
     url = get_url('orders')
