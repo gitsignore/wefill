@@ -1,6 +1,7 @@
 from __future__ import print_function
 from __future__ import print_function
 import locale
+from django.conf import settings
 from django import template
 from datetime import date
 from itertools import groupby
@@ -8,22 +9,6 @@ import datetime
 import calendar
 
 register = template.Library()
-
-
-DAY_SCHEDULES = (
-    '09:00 - 10:00',
-    '10:00 - 11:00',
-    '11:00 - 12:00',
-    '12:00 - 13:00',
-    '13:00 - 14:00',
-    '14:00 - 15:00',
-    '15:00 - 16:00',
-    '16:00 - 17:00',
-    '17:00 - 18:00',
-    '18:00 - 19:00',
-    '19:00 - 20:00',
-    '20:00 - 21:00',
-)
 
 
 def do_schedules(parser, token):
@@ -85,7 +70,7 @@ class EventCalendarNode(template.Node):
             display = 'hide'
         if day != 0:
             body = '<div class="list-group {0} {2}" data-src={1}>'.format(day, full_date, display)
-            for schedule in DAY_SCHEDULES:
+            for schedule in settings.DAY_SCHEDULES:
                 if events:
                     for key, event in enumerate(events):
                         if schedule[:2] != event['date_refill'][11:13]:

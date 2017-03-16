@@ -171,6 +171,21 @@ CALENDAR = {
     'months_visibilty': 2,
 }
 
+DAY_SCHEDULES = (
+    '09:00 - 10:00',
+    '10:00 - 11:00',
+    '11:00 - 12:00',
+    '12:00 - 13:00',
+    '13:00 - 14:00',
+    '14:00 - 15:00',
+    '15:00 - 16:00',
+    '16:00 - 17:00',
+    '17:00 - 18:00',
+    '18:00 - 19:00',
+    '19:00 - 20:00',
+    '20:00 - 21:00',
+)
+
 PAYPAL_TEST = True
 PAYPAL_IMAGE = "https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg"
 PAYPAL_SUBSCRIPTION_IMAGE = "https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg"
