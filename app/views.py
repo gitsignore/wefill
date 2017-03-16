@@ -378,6 +378,8 @@ def summary(request):
         if order_response.ok and user:
             order = order_response.json()
             order['date_refill'] = str(order['date_refill'])
+            order['address'] = order['address']['id']
+            order['vehicle'] = order['vehicle']['id']
             order['is_payed'] = True
             api_order_update(order, request.session['user']['token'])
 

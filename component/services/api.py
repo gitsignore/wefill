@@ -76,6 +76,9 @@ def put_call(url, params=None, json=None, headers=None):
     if params is None:
         params = {}
 
+    if json is None:
+        json = {}
+
     response = requests.put(url, params=params, json=json, headers=headers)
 
     if response.status_code == 401:
@@ -271,7 +274,7 @@ def order_update(order, token):
     :param token:
     :return:
     """
-    url = get_url('orders', order['id'] + '/')
+    url = get_url('orders', str(order['id']) + '/')
     headers = header_token(token)
 
     return put_call(url, json=order, headers=headers)

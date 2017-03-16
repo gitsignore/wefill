@@ -17,18 +17,20 @@
                     <th>Commande n°</th>
                     <th>Type de carburant</th>
                     <th>Date de livraison</th>
-                    <th>Annulé</th>
                     <th>Payé</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody style="background-color: rgba(1, 1, 1, 0.3);">
                 {% for order in orders %}
                     <tr>
                         <td>{{ order.id }}</td>
                         <td>{{ order.gas_name }}</td>
                         <td>{{ order.date_refill|date:'d-m-Y H:i' }}</td>
-                        <td>{{ order.is_canceled }}</td>
-                        <td>{{ order.is_payed }}</td>
+                        <td>{% if order.is_payed %}
+                                <i class="icon-check" style="color: #00FF00; "></i>
+                            {% else %}
+                                <i class="icon-close text-danger" style="color: #FF4444"></i>
+                            {% endif %}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
