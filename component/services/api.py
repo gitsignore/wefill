@@ -75,7 +75,7 @@ def put_call(url, params=None, headers=None):
     if params is None:
         params = {}
 
-    response = requests.put(url, data=params, headers=headers)
+    response = requests.put(url, json=params, headers=headers)
 
     if response.status_code == 401:
         raise RedirectException(reverse('logout'))
@@ -106,7 +106,7 @@ def login(params):
     """
     url = get_url('login')
 
-    return post_call(url, params=params)
+    return post_call(url, json=params)
 
 
 def register(params):
@@ -117,7 +117,7 @@ def register(params):
     """
     url = get_url('users')
 
-    return post_call(url, params=params)
+    return post_call(url, json=params)
 
 
 def get_user(user_email, token):
@@ -169,7 +169,7 @@ def create_address(address, token):
     url = get_url('addresses')
     headers = header_token(token)
 
-    return post_call(url, params=address, headers=headers)
+    return post_call(url, json=address, headers=headers)
 
 
 def edit_address(address, token):
@@ -221,7 +221,7 @@ def create_vehicle(vehicle, token):
     url = get_url('vehicles')
     headers = header_token(token)
 
-    return post_call(url, params=vehicle, headers=headers)
+    return post_call(url, json=vehicle, headers=headers)
 
 
 def edit_vehicle(vehicle, token):
@@ -297,7 +297,7 @@ def create_gas(gas, token):
     url = get_url('gas')
     headers = header_token(token)
 
-    return post_call(url, params=gas, headers=headers)
+    return post_call(url, json=gas, headers=headers)
 
 
 def edit_gas(gas, token):

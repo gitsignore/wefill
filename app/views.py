@@ -109,6 +109,9 @@ def edit_profile(request):
                 data = form.cleaned_data
                 user['lastname'] = data['lastname']
                 user['firstname'] = data['firstname']
+                user.pop('order_set')
+                user.pop('address_set')
+                user.pop('vehicle_set')
                 response = api_edit_user(user, request.session['user']['token'])
                 if response.ok:
                     return HttpResponseRedirect(reverse('profile'))
