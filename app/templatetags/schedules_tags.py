@@ -64,7 +64,7 @@ class EventCalendarNode(template.Node):
     def formatday(self, full_date, events):
         day = full_date[-2:]
         today = date.today()
-        if str(today)[-2:] == str(int(day) + 1):
+        if int(today.day + 1) == int(day):
             display = 'show'
         else:
             display = 'hide'
