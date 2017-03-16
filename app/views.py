@@ -22,6 +22,7 @@ from component.services.api import edit_vehicle as api_edit_vehicle
 from component.services.api import delete_address as api_delete_address
 from component.services.api import delete_vehicle as api_delete_vehicle
 from component.services.api import order_validate as api_order_validate
+from component.services.api import order_update as api_order_update
 from component.services.api import get_gas as api_get_gas
 from component.services.api import get_gas_by_id as api_get_gas_by_id
 from component.services.api import create_gas as api_create_gas
@@ -368,13 +369,23 @@ def payment(request):
 
 @auth_required
 def summary(request):
+    # Hook to simulate paypal callback
     try:
-        order = request.session['order']
-        del request.session['order']
+        order_response = api_get_order(request.session['order']['id'], request.session['user']['token'])
+        user = request.session['user']
 
-        return render(request, "summary.html", {'order': order})
+        if order_response.ok and user:
+            order = order_response.json()
+            order['is_payed'] = True
+            api_order_update(order, request.session['user']['token'])
+
+            context = {'order': order}
+            del request.session['order']
+
+            return render(request, "summary.html", context)
     except KeyError:
         return HttpResponseRedirect(reverse('book'))
+    return HttpResponseRedirect(reverse('book'))
 
 
 @auth_required
@@ -384,9 +395,10 @@ def calendar(request, year, month):
     """
     token = request.session['user']['token']
     today = date.today()
-    monthrange = cal.monthrange(today.year, today.month)
-    date_start = str(today)[:8] + '01'
-    date_end = str(today)[:8] + str(monthrange[1])
+    monthrange = cal.monthrange(int(year), int(month))
+    month = '%02d' % int(month)
+    date_start = year + '-' + month + '-' + '01'
+    date_end = year + '-' + month + '-' + str(monthrange[1])
     response = api_get_orders(token, date_start, date_end)
     orders = response.json()
     my_year = int(year)

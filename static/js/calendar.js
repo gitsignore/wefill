@@ -32,7 +32,7 @@
     // Get current date
     var date = new Date();
     // Load actual month calendar on page load
-    $("#calendar").load('/calendar/' + date.getFullYear() + '/' + date.getMonth());
+    $("#calendar").load('/calendar/' + date.getFullYear() + '/' + (parseInt(date.getMonth()) + 1));
 
     // Ajax call to change calendar date on click
     $(document).on('click', '.load', function (event) {

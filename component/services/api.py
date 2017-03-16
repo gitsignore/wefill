@@ -64,18 +64,19 @@ def post_call(url, params=None, json=None, headers=None):
     return response
 
 
-def put_call(url, params=None, headers=None):
+def put_call(url, params=None, json=None, headers=None):
     """
     Call api with PUT method
     :param url:
     :param params:
+    :param json:
     :param headers:
     :return:
     """
     if params is None:
         params = {}
 
-    response = requests.put(url, json=params, headers=headers)
+    response = requests.put(url, params=params, json=json, headers=headers)
 
     if response.status_code == 401:
         raise RedirectException(reverse('logout'))
@@ -143,7 +144,7 @@ def edit_user(user, token):
     url = get_url('users', user['email'] + '/')
     headers = header_token(token)
 
-    return put_call(url, params=user, headers=headers)
+    return put_call(url, json=user, headers=headers)
 
 
 def get_address(address_id, token):
@@ -182,7 +183,7 @@ def edit_address(address, token):
     url = get_url('addresses', address['id'] + '/')
     headers = header_token(token)
 
-    return put_call(url, params=address, headers=headers)
+    return put_call(url, json=address, headers=headers)
 
 
 def delete_address(address_id, token):
@@ -234,7 +235,7 @@ def edit_vehicle(vehicle, token):
     url = get_url('vehicles', vehicle['id'] + '/')
     headers = header_token(token)
 
-    return put_call(url, params=vehicle, headers=headers)
+    return put_call(url, json=vehicle, headers=headers)
 
 
 def delete_vehicle(vehicle_id, token):
@@ -261,6 +262,19 @@ def order_validate(order, token):
     headers = header_token(token)
 
     return post_call(url, params=order, headers=headers)
+
+
+def order_update(order, token):
+    """
+    Update an order
+    :param order:
+    :param token:
+    :return:
+    """
+    url = get_url('orders', order['id'] + '/')
+    headers = header_token(token)
+
+    return put_call(url, params=order, headers=headers)
 
 
 def get_gas(token):
@@ -310,7 +324,7 @@ def edit_gas(gas, token):
     url = get_url('gas', gas['id'])
     headers = header_token(token)
 
-    return put_call(url, params=gas, headers=headers)
+    return put_call(url, json=gas, headers=headers)
 
 
 def delete_gas(gas_id, token):
