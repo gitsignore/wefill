@@ -261,7 +261,7 @@ def order_validate(order, token):
     url = get_url('orders')
     headers = header_token(token)
 
-    return post_call(url, params=order, headers=headers)
+    return post_call(url, json=order, headers=headers)
 
 
 def order_update(order, token):
@@ -274,7 +274,7 @@ def order_update(order, token):
     url = get_url('orders', order['id'] + '/')
     headers = header_token(token)
 
-    return put_call(url, params=order, headers=headers)
+    return put_call(url, json=order, headers=headers)
 
 
 def get_gas(token):

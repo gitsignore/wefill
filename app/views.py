@@ -325,6 +325,7 @@ def book(request):
                         'form': form, 'errors': 'Date invalide'
                     })
                 data['user'] = request.session['user']['id']
+                data['date_refill'] = str(data['date_refill'])
                 for gas_choice in gas_choices:
                     if data['gas_name'] == gas_choice['name']:
                         data.update({'gas_price': gas_choice['price']})
@@ -376,6 +377,7 @@ def summary(request):
 
         if order_response.ok and user:
             order = order_response.json()
+            order['date_refill'] = str(order['date_refill'])
             order['is_payed'] = True
             api_order_update(order, request.session['user']['token'])
 
