@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/table.css' %}"/>
+{% endblock %}
+{% block content %}
+    {% include './navbar/navbar.html' %}
+    <div class="position-top"></div>
+    <div class="wrapper">
+        <div class="one">
+            <h1>
+                Carburants
+            </h1>
+            <input type="button" value="+" class="btn btn-success" onclick="window.open('{% url 'create_gas' %}')"/>
+            <table class="table table-hover table-inverse">
+                <thead>
+                <tr>
+                    <th>Type de carburant</th>
+                    <th>Prix</th>
+                    <th><img width="20px" src="{% static 'images/delete.png' %}"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for fuel in gas %}
+                    <tr>
+                        <td>{{ fuel.name }}</td>
+                        <td>{{ fuel.price }}</td>
+                        <td>
+                            <input type="button" value="-" class="btn btn-danger"
+                                   onclick="window.open('{% url 'delete_gas' fuel.id %}')"/>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="two">
+            <h1>
+                Commandes du jour
+            </h1>
+            <table class="table table-hover table-inverse">
+                <thead>
+                <tr>
+                    <th>Numéro de commande</th>
+                    <th>ID Client</th>
+                    <th>Adresse</th>
+                    <th>Ville</th>
+                    <th>Code Postal</th>
+                    <th>Véhicule</th>
+                    <th>Immatriculation</th>
+                    <th>Couleur</th>
+                    <th>Type de carburant</th>
+                    <th>Quantité</th>
+                    <th>Horaire</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    {% if order.is_payed and order.is_canceled != False %}
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.user }}</td>
+                            <td>{{ order.address.street }}</td>
+                            <td>{{ order.address.city }}</td>
+                            <td>{{ order.address.zip }}</td>
+                            <td>{{ order.vehicle.brand }}</td>
+                            <td>{{ order.vehicle.plate }}</td>
+                            <td>{{ order.vehicle.color }}</td>
+                            <td>{{ order.gas_name }}</td>
+                            <td>{{ order.gas_quantity }} L</td>
+                            <td>{{ order.date_refill|date:'H:i' }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

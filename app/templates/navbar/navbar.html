@@ -19,6 +19,9 @@
                     <li><a href="{% url 'book' %}">Réserver</a></li>
                     <li><a href="{% url 'profile' %}">Mon compte</a></li>
                     <li><a href="{% url 'orders' %}">Mes commandes</a></li>
+                    {% if request.session|is_admin %}
+                        <li><a href="{% url 'admin' %}">Administration</a></li>
+                    {% endif %}
                     <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
                 {% else %}
                     <li><a href="{% url 'register' %}">S'inscrire</a></li>

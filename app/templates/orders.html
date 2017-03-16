@@ -5,15 +5,34 @@
 {% endblock %}
 {% block content %}
     {% include './navbar/navbar.html' %}
-    <div class="login">
-      <h1>
-        <div class="test" data-text="Commandes"></div>
-      </h1>
-     {% for address in user.address_set %}
-
-     {% endfor %}
+    <div class="position-top"></div>
+    <div class="wrapper">
+        <div class="one" style="width: 100%">
+            <h1>
+                Mes commandes
+            </h1>
+            <table class="table table-hover table-inverse">
+                <thead>
+                <tr>
+                    <th>Commande n°</th>
+                    <th>Type de carburant</th>
+                    <th>Date de livraison</th>
+                    <th>Annulé</th>
+                    <th>Payé</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.gas_name }}</td>
+                        <td>{{ order.date_refill|date:'d-m-Y H:i' }}</td>
+                        <td>{{ order.is_canceled }}</td>
+                        <td>{{ order.is_payed }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-{% endblock %}
-{% block javascripts %}
-    <script src="{% static 'js/typeWriter.js' %}"></script>
 {% endblock %}

@@ -139,6 +139,7 @@ STATICFILES_DIRS = (
 
 # Wich URL to redirect the user after a successful authentication
 LOGIN_REDIRECT_URL = 'login'
+ADMIN_REDIRECT_URL = 'wefill'
 
 API = {
     'default': {
@@ -165,6 +166,10 @@ PAYPAL_API = {
 }
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
+
+CALENDAR = {
+    'months_visibilty': 2,
+}
 
 PAYPAL_TEST = True
 PAYPAL_IMAGE = "https://www.paypalobjects.com/webstatic/mktg/logo-center/logo_paypal_moyens_paiement_fr.jpg"

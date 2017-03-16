@@ -133,6 +133,19 @@ def get_user(user_email, token):
     return get_call(url, headers=headers)
 
 
+def edit_user(user, token):
+    """
+    Edit user
+    :param user:
+    :param token:
+    :return:
+    """
+    url = get_url('users', user['email'] + '/')
+    headers = header_token(token)
+
+    return put_call(url, params=user, headers=headers)
+
+
 def get_address(address_id, token):
     """
     Retieve user address
@@ -166,7 +179,7 @@ def edit_address(address, token):
     :param token:
     :return:
     """
-    url = get_url('addresses', address['id'])
+    url = get_url('addresses', address['id'] + '/')
     headers = header_token(token)
 
     return put_call(url, params=address, headers=headers)
@@ -218,7 +231,7 @@ def edit_vehicle(vehicle, token):
     :param token:
     :return:
     """
-    url = get_url('vehicles', vehicle['id'])
+    url = get_url('vehicles', vehicle['id'] + '/')
     headers = header_token(token)
 
     return put_call(url, params=vehicle, headers=headers)
@@ -260,6 +273,57 @@ def get_gas(token):
     headers = header_token(token)
 
     return get_call(url, headers=headers)
+
+
+def get_gas_by_id(gas_id, token):
+    """
+    Get gas by id
+    :param token:
+    :return:
+    """
+    url = get_url('gas', gas_id)
+    headers = header_token(token)
+
+    return get_call(url, headers=headers)
+
+
+def create_gas(gas, token):
+    """
+    Create gas
+    :param gas:
+    :param token:
+    :return:
+    """
+    url = get_url('gas')
+    headers = header_token(token)
+
+    return post_call(url, params=gas, headers=headers)
+
+
+def edit_gas(gas, token):
+    """
+    Edit gas
+    :param gas:
+    :param token:
+    :return:
+    """
+    url = get_url('gas', gas['id'])
+    headers = header_token(token)
+
+    return put_call(url, params=gas, headers=headers)
+
+
+def delete_gas(gas_id, token):
+    """
+    Delete gas
+    :param gas_id:
+    :param token:
+    :return:
+    """
+    url = get_url('gas', gas_id)
+    headers = header_token(token)
+
+    return delete_call(url, headers=headers)
 
 
 def get_order(id, token):

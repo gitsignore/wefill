@@ -4,26 +4,26 @@
 
 {% block content %}
     <div class="login">
-      <a href="{% url 'wefill' %}"><img  id="logo_login" alt='wefill' src="{% static 'images/logo.png' %}"></a>
-      <h2>S'inscrire</h2>
-      <form method="post">
-          {% if errors %}
-              <ol>
-                  {% for error in errors %}
-                      <li><strong>{{ error|escape }}</strong></li>
-                  {% endfor %}
-              </ol>
-          {% endif %}
-          {% csrf_token %}
-            {% for form_loop in form %}
-              <div class="group">
-                {{ form_loop }}
-                <span class="highlight"></span><span class="bar"></span>
-                <label>{{ form_loop.name }}</label>
-              </div>
+        <a href="{% url 'wefill' %}"><img id="logo_login" alt='wefill' src="{% static 'images/logo.png' %}"></a>
+        <h2>S'inscrire</h2>
+        <form method="post">
+            {% csrf_token %}
+
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
             {% endfor %}
-          <button class="button buttonBlue" type="submit">Create Account
-          <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div></button>
-      </form>
+
+            {% for field in form.visible_fields %}
+                <div class="fieldWrapper group">
+                    {{ field.errors }}
+                    {{ field }}
+                    <span class="highlight"></span><span class="bar"></span>
+                    {{ field.label_tag }}
+                </div>
+            {% endfor %}
+            <button class="button buttonBlue" type="submit" value="Submit">S'inscrire
+                <div class="ripples buttonRipples"><span class="ripplesCircle"></span></div>
+            </button>
+        </form>
     </div>
 {% endblock %}
