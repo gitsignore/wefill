@@ -1,5 +1,7 @@
 # wefill
 
+[![GuardRails badge](https://badges.production.guardrails.io/gitsignore/wefill.svg)](https://www.guardrails.io)
+
 Wefill is an educational project to order fuel online.
 
 Require wefill-api : <https://github.com/TataneInYourFace/wefill-api>
